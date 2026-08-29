@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
+import { useTheme } from '../context/ThemeContext';
 import {
   ShoppingBag,
   Store,
@@ -15,6 +16,8 @@ import {
   Heart,
   Menu,
   X,
+  Sun,
+  Moon,
   Sparkles,
 } from 'lucide-react';
 
@@ -22,6 +25,7 @@ export const Navbar = ({ currentTab, setCurrentTab, onOpenCart, onOpenApiDocs })
   const { user, logout } = useAuth();
   const { totalItemCount } = useCart();
   const { wishlistCount } = useWishlist();
+  const { isDark, toggleTheme } = useTheme();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const menuRef = useRef(null);
@@ -37,34 +41,34 @@ export const Navbar = ({ currentTab, setCurrentTab, onOpenCart, onOpenApiDocs })
   }, []);
 
   const navItems = [
-    { id: 'store', label: 'Storefront', icon: ShoppingBag, color: 'bg-[#FEF08A]' },
-    { id: 'wishlist', label: 'Wishlist', icon: Heart, count: wishlistCount, color: 'bg-[#FF6B97]' },
-    { id: 'orders', label: 'My Orders', icon: Layers, color: 'bg-[#C4B5FD]' },
-    ...(user?.role === 'vendor' ? [{ id: 'vendor', label: 'Vendor Portal', icon: Store, color: 'bg-[#6EE7B7]' }] : []),
+    { id: 'store', label: 'Storefront', icon: ShoppingBag, color: 'bg-[#FEF08A] dark:bg-[#FFE600] text-black' },
+    { id: 'wishlist', label: 'Wishlist', icon: Heart, count: wishlistCount, color: 'bg-[#FF6B97] dark:bg-[#FF2A85] text-white dark:text-white' },
+    { id: 'orders', label: 'My Orders', icon: Layers, color: 'bg-[#C4B5FD] dark:bg-[#B026FF] text-black dark:text-white' },
+    ...(user?.role === 'vendor' ? [{ id: 'vendor', label: 'Vendor Portal', icon: Store, color: 'bg-[#6EE7B7] dark:bg-[#00FF87] text-black' }] : []),
     ...(user?.role === 'admin' ? [
-      { id: 'vendor', label: 'Vendor Portal', icon: Store, color: 'bg-[#6EE7B7]' },
-      { id: 'admin', label: 'Admin Hub', icon: BarChart3, color: 'bg-[#FEF08A]' },
-      { id: 'concurrency', label: 'Concurrency Lab', icon: Zap, color: 'bg-[#FF6B97]' },
+      { id: 'vendor', label: 'Vendor Portal', icon: Store, color: 'bg-[#6EE7B7] dark:bg-[#00FF87] text-black' },
+      { id: 'admin', label: 'Admin Hub', icon: BarChart3, color: 'bg-[#FEF08A] dark:bg-[#FFE600] text-black' },
+      { id: 'concurrency', label: 'Concurrency Lab', icon: Zap, color: 'bg-[#FF6B97] dark:bg-[#FF2A85] text-white' },
     ] : []),
   ];
 
   return (
-    <header className="sticky top-0 z-40 bg-[#FFFFFF] border-b-3 border-black shadow-brutal mb-6">
+    <header className="sticky top-0 z-40 bg-[#FFFFFF] dark:bg-[#121522] border-b-3 border-black shadow-brutal mb-6 transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand */}
         <div
           className="flex items-center space-x-3 cursor-pointer group"
           onClick={() => setCurrentTab('store')}
         >
-          <div className="w-10 h-10 rounded-xl bg-[#FEF08A] border-2.5 border-black shadow-brutal-sm flex items-center justify-center text-black font-display font-black text-sm group-hover:rotate-6 transition">
+          <div className="w-10 h-10 rounded-xl bg-[#FEF08A] dark:bg-[#FFE600] border-2.5 border-black shadow-brutal-sm flex items-center justify-center text-black font-display font-black text-sm group-hover:rotate-6 transition">
             MP
           </div>
           <div className="flex items-center space-x-2">
-            <span className="text-lg font-display font-black tracking-tight text-black">
+            <span className="text-lg font-display font-black tracking-tight text-black dark:text-white">
               MarketPulse
             </span>
-            <span className="px-2 py-0.5 rounded-md bg-[#6EE7B7] border-2 border-black text-[10px] font-mono font-black uppercase shadow-[1px_1px_0px_0px_#000] hidden sm:inline-flex">
-              Neubrutal
+            <span className="px-2 py-0.5 rounded-md bg-[#6EE7B7] dark:bg-[#00FF87] border-2 border-black text-[10px] font-mono font-black uppercase text-black shadow-[1px_1px_0px_0px_#000] hidden sm:inline-flex">
+              {isDark ? 'Cyber Dark' : 'Neubrutal'}
             </span>
           </div>
         </div>
@@ -81,11 +85,11 @@ export const Navbar = ({ currentTab, setCurrentTab, onOpenCart, onOpenApiDocs })
                 className={`px-3.5 py-1.5 rounded-xl text-xs font-display font-bold flex items-center space-x-1.5 transition border-2 border-black ${
                   isActive
                     ? `${item.color} shadow-brutal translate-x-[-1px] translate-y-[-1px]`
-                    : 'bg-white hover:bg-slate-100 shadow-brutal-sm hover:translate-x-[-1px] hover:translate-y-[-1px]'
+                    : 'bg-white dark:bg-[#1A1E30] text-black dark:text-white hover:bg-slate-100 dark:hover:bg-[#252A42] shadow-brutal-sm hover:translate-x-[-1px] hover:translate-y-[-1px]'
                 }`}
               >
-                <Icon className="w-4 h-4 text-black" />
-                <span className="text-black">{item.label}</span>
+                <Icon className="w-4 h-4" />
+                <span>{item.label}</span>
                 {item.count > 0 && (
                   <span className="px-1.5 py-0.2 rounded-full bg-black text-white text-[10px] font-mono font-black">
                     {item.count}
@@ -98,19 +102,28 @@ export const Navbar = ({ currentTab, setCurrentTab, onOpenCart, onOpenApiDocs })
 
         {/* Right Actions */}
         <div className="flex items-center space-x-2.5">
+          {/* Dark / Light Theme Toggle */}
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-xl bg-white dark:bg-[#1A1E30] border-2 border-black text-black dark:text-white shadow-brutal-sm hover:bg-[#FEF08A] dark:hover:bg-[#FFE600] dark:hover:text-black transition"
+            title={isDark ? 'Switch to Light Theme' : 'Switch to Sexy Dark Theme'}
+          >
+            {isDark ? <Sun className="w-4 h-4 text-[#FFE600]" /> : <Moon className="w-4 h-4 text-black" />}
+          </button>
+
           {/* Wishlist quick button */}
           <button
             onClick={() => setCurrentTab('wishlist')}
             className={`relative p-2 rounded-xl border-2 border-black transition ${
               currentTab === 'wishlist'
-                ? 'bg-[#FF6B97] shadow-brutal'
-                : 'bg-white shadow-brutal-sm hover:bg-[#FBCFE8]'
+                ? 'bg-[#FF6B97] dark:bg-[#FF2A85] text-white shadow-brutal'
+                : 'bg-white dark:bg-[#1A1E30] text-black dark:text-white shadow-brutal-sm hover:bg-[#FBCFE8] dark:hover:bg-[#FF2A85]/20'
             }`}
             title="My Wishlist"
           >
-            <Heart className="w-4 h-4 text-black" />
+            <Heart className="w-4 h-4" />
             {wishlistCount > 0 && (
-              <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-black text-white text-[10px] font-mono font-black flex items-center justify-center border border-white">
+              <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-black dark:bg-[#FF2A85] text-white text-[10px] font-mono font-black flex items-center justify-center border border-white">
                 {wishlistCount}
               </span>
             )}
@@ -120,7 +133,7 @@ export const Navbar = ({ currentTab, setCurrentTab, onOpenCart, onOpenApiDocs })
           {user?.role === 'customer' && (
             <button
               onClick={onOpenCart}
-              className="relative p-2 rounded-xl bg-[#FEF08A] border-2 border-black shadow-brutal-sm hover:bg-[#FDE047] transition"
+              className="relative p-2 rounded-xl bg-[#FEF08A] dark:bg-[#FFE600] border-2 border-black shadow-brutal-sm hover:bg-[#FDE047] text-black transition"
               title="Shopping Cart"
             >
               <ShoppingBag className="w-4 h-4 text-black" />
@@ -136,7 +149,7 @@ export const Navbar = ({ currentTab, setCurrentTab, onOpenCart, onOpenApiDocs })
           {user?.role === 'admin' && (
             <button
               onClick={onOpenApiDocs}
-              className="hidden sm:flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-display font-bold bg-[#67E8F9] border-2 border-black shadow-brutal-sm hover:bg-[#38BDF8] transition"
+              className="hidden sm:flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-display font-bold bg-[#67E8F9] dark:bg-[#00F0FF] border-2 border-black shadow-brutal-sm text-black hover:bg-[#38BDF8] transition"
             >
               <FileCode className="w-4 h-4 text-black" />
               <span>API</span>
@@ -146,7 +159,7 @@ export const Navbar = ({ currentTab, setCurrentTab, onOpenCart, onOpenApiDocs })
           {/* Mobile menu toggle */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-2 rounded-xl bg-white border-2 border-black shadow-brutal-sm text-black"
+            className="md:hidden p-2 rounded-xl bg-white dark:bg-[#1A1E30] border-2 border-black shadow-brutal-sm text-black dark:text-white"
           >
             {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
           </button>
@@ -155,36 +168,36 @@ export const Navbar = ({ currentTab, setCurrentTab, onOpenCart, onOpenApiDocs })
           <div className="relative" ref={menuRef}>
             <button
               onClick={() => setShowUserMenu(!showUserMenu)}
-              className="flex items-center space-x-2 px-3 py-1.5 rounded-xl bg-white border-2 border-black shadow-brutal-sm hover:bg-slate-50 transition"
+              className="flex items-center space-x-2 px-3 py-1.5 rounded-xl bg-white dark:bg-[#1A1E30] border-2 border-black shadow-brutal-sm hover:bg-slate-50 dark:hover:bg-[#252A42] transition text-black dark:text-white"
             >
               {user?.avatar ? (
                 <img src={user.avatar} alt={user.name} className="w-5 h-5 rounded-full object-cover border border-black" />
               ) : (
-                <div className="w-5 h-5 rounded-full bg-[#FEF08A] border border-black flex items-center justify-center">
+                <div className="w-5 h-5 rounded-full bg-[#FEF08A] dark:bg-[#FFE600] border border-black flex items-center justify-center">
                   <User className="w-3 h-3 text-black" />
                 </div>
               )}
-              <span className="text-xs font-display font-bold text-black truncate max-w-[90px] hidden sm:block">
+              <span className="text-xs font-display font-bold text-black dark:text-white truncate max-w-[90px] hidden sm:block">
                 {user?.name}
               </span>
-              <ChevronDown className="w-3 h-3 text-black" />
+              <ChevronDown className="w-3 h-3 text-black dark:text-white" />
             </button>
 
             {showUserMenu && (
-              <div className="absolute right-0 mt-2 w-64 bg-white border-3 border-black rounded-2xl shadow-brutal-lg p-2 z-50 animate-pop-in">
+              <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-[#121522] border-3 border-black rounded-2xl shadow-brutal-lg p-2 z-50 animate-pop-in">
                 {/* User info */}
-                <div className="p-3 bg-[#FEF08A] border-2 border-black rounded-xl mb-2">
+                <div className="p-3 bg-[#FEF08A] dark:bg-[#1A1E30] border-2 border-black rounded-xl mb-2 text-black dark:text-white">
                   <div className="flex items-center justify-between">
                     <div>
-                      <div className="text-xs font-display font-black text-black">{user?.name}</div>
-                      <div className="text-[10px] text-black font-mono font-bold truncate">{user?.email}</div>
+                      <div className="text-xs font-display font-black">{user?.name}</div>
+                      <div className="text-[10px] opacity-70 font-mono font-bold truncate">{user?.email}</div>
                     </div>
                     <span className="px-2 py-0.5 rounded-md bg-black text-white text-[10px] font-mono font-black uppercase">
                       {user?.role}
                     </span>
                   </div>
                   {user?.store && (
-                    <div className="mt-1.5 text-[10px] text-black font-bold flex items-center gap-1.5">
+                    <div className="mt-1.5 text-[10px] font-bold flex items-center gap-1.5 text-black dark:text-white">
                       <Store className="w-3 h-3" />
                       <span>{user.store.name}</span>
                     </div>
@@ -197,9 +210,9 @@ export const Navbar = ({ currentTab, setCurrentTab, onOpenCart, onOpenApiDocs })
                     setCurrentTab('wishlist');
                     setShowUserMenu(false);
                   }}
-                  className="w-full text-left px-3 py-2 rounded-xl hover:bg-[#F3F4F6] transition flex items-center space-x-2 text-xs font-bold text-black"
+                  className="w-full text-left px-3 py-2 rounded-xl hover:bg-[#F3F4F6] dark:hover:bg-[#1A1E30] transition flex items-center space-x-2 text-xs font-bold text-black dark:text-white"
                 >
-                  <Heart className="w-4 h-4 text-[#FF6B97]" />
+                  <Heart className="w-4 h-4 text-[#FF6B97] dark:text-[#FF2A85]" />
                   <span>My Wishlist ({wishlistCount})</span>
                 </button>
 
@@ -209,7 +222,7 @@ export const Navbar = ({ currentTab, setCurrentTab, onOpenCart, onOpenApiDocs })
                     logout();
                     setShowUserMenu(false);
                   }}
-                  className="w-full text-left px-3 py-2 rounded-xl bg-[#FF6B97]/20 hover:bg-[#FF6B97] hover:text-white border-2 border-black transition flex items-center space-x-2 text-xs font-bold text-black mt-2"
+                  className="w-full text-left px-3 py-2 rounded-xl bg-[#FF6B97]/20 dark:bg-[#FF2A85]/20 hover:bg-[#FF6B97] dark:hover:bg-[#FF2A85] hover:text-white border-2 border-black transition flex items-center space-x-2 text-xs font-bold text-black dark:text-white mt-2"
                 >
                   <LogOut className="w-4 h-4" />
                   <span>Sign Out</span>
@@ -222,7 +235,7 @@ export const Navbar = ({ currentTab, setCurrentTab, onOpenCart, onOpenApiDocs })
 
       {/* Mobile Navigation */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t-2 border-black bg-white px-4 py-3 space-y-2 animate-pop-in">
+        <div className="md:hidden border-t-2 border-black bg-white dark:bg-[#121522] px-4 py-3 space-y-2 animate-pop-in">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = currentTab === item.id;
@@ -231,11 +244,11 @@ export const Navbar = ({ currentTab, setCurrentTab, onOpenCart, onOpenApiDocs })
                 key={item.id}
                 onClick={() => { setCurrentTab(item.id); setMobileMenuOpen(false); }}
                 className={`w-full px-3 py-2 rounded-xl text-xs font-display font-bold flex items-center justify-between border-2 border-black ${
-                  isActive ? `${item.color} shadow-brutal-sm` : 'bg-white'
+                  isActive ? `${item.color} shadow-brutal-sm` : 'bg-white dark:bg-[#1A1E30] text-black dark:text-white'
                 }`}
               >
                 <div className="flex items-center gap-2">
-                  <Icon className="w-4 h-4 text-black" />
+                  <Icon className="w-4 h-4" />
                   <span>{item.label}</span>
                 </div>
                 {item.count > 0 && (

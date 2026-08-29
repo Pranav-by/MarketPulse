@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { WishlistProvider } from './context/WishlistContext';
+import { ThemeProvider, useTheme } from './context/ThemeContext';
 import { AuthPage } from './components/AuthPage';
 import { Navbar } from './components/Navbar';
 import { StorefrontView } from './components/StorefrontView';
@@ -14,16 +15,16 @@ import { CartDrawer } from './components/CartDrawer';
 import { ProductDetailModal } from './components/ProductDetailModal';
 import { ApiDocsModal } from './components/ApiDocsModal';
 import { OrdersHistoryView } from './components/OrdersHistoryView';
-import { Sparkles, Layers } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 
 const LoadingScreen = () => (
-  <div className="min-h-screen bg-[#5B85FA] brutal-grid-bg flex items-center justify-center p-4">
+  <div className="min-h-screen bg-[#5B85FA] dark:bg-[#090A10] brutal-grid-bg flex items-center justify-center p-4">
     <div className="neo-card p-8 text-center space-y-4 shadow-brutal-xl animate-pop-in">
-      <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[#FEF08A] border-3 border-black shadow-brutal">
+      <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[#FEF08A] dark:bg-[#FFE600] border-3 border-black shadow-brutal">
         <Sparkles className="w-7 h-7 text-black animate-spin" />
       </div>
-      <h2 className="text-lg font-display font-black text-black">Loading MarketPulse...</h2>
-      <p className="text-xs font-mono font-bold text-black/70">Neo-Brutalist Engine</p>
+      <h2 className="text-lg font-display font-black text-black dark:text-white">Loading MarketPulse...</h2>
+      <p className="text-xs font-mono font-bold text-black/70 dark:text-white/70">Neo-Brutalist Engine</p>
     </div>
   </div>
 );
@@ -50,7 +51,7 @@ const MainApp = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#5B85FA] brutal-grid-bg text-black selection:bg-[#FEF08A] selection:text-black flex flex-col justify-between">
+    <div className="min-h-screen bg-[#5B85FA] dark:bg-[#090A10] brutal-grid-bg text-black dark:text-white selection:bg-[#FEF08A] selection:text-black flex flex-col justify-between transition-colors duration-200">
       {/* Top Navbar */}
       <Navbar
         currentTab={currentTab}
@@ -107,12 +108,12 @@ const MainApp = () => {
       />
 
       {/* Footer */}
-      <footer className="border-t-3 border-black bg-[#FEF08A] py-6 px-4 sm:px-6 lg:px-8 text-xs text-black font-mono font-bold shadow-[0px_-4px_0px_0px_#000]">
+      <footer className="border-t-3 border-black bg-[#FEF08A] dark:bg-[#121522] py-6 px-4 sm:px-6 lg:px-8 text-xs text-black dark:text-white font-mono font-bold shadow-[0px_-4px_0px_0px_#000] transition-colors">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center space-x-2">
-            <span className="font-display font-black text-sm uppercase bg-black text-white px-2 py-0.5 rounded-md">MarketPulse</span>
+            <span className="font-display font-black text-sm uppercase bg-black text-white px-2 py-0.5 rounded-md border border-white/20">MarketPulse</span>
             <span>★</span>
-            <span>Neo-Brutalist Multi-Vendor Architecture</span>
+            <span>Neo-Brutalist & Cyber-Dark Engine</span>
           </div>
 
           <div className="flex items-center space-x-4 text-xs font-black">
@@ -130,13 +131,15 @@ const MainApp = () => {
 
 export function App() {
   return (
-    <AuthProvider>
-      <CartProvider>
-        <WishlistProvider>
-          <MainApp />
-        </WishlistProvider>
-      </CartProvider>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <CartProvider>
+          <WishlistProvider>
+            <MainApp />
+          </WishlistProvider>
+        </CartProvider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 
