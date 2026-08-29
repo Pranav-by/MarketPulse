@@ -7,6 +7,7 @@ import {
   CheckCircle2,
   AlertCircle,
   Plus,
+  Minus,
   Star,
   Shield,
   Heart,
@@ -17,7 +18,7 @@ import {
 } from 'lucide-react';
 
 export const StorefrontView = ({ onSelectProduct, onOpenStore }) => {
-  const { addToCart } = useCart();
+  const { addToCart, updateQuantity, getItemQuantity } = useCart();
   const { toggleWishlist, isInWishlist } = useWishlist();
 
   const [products, setProducts] = useState([]);
@@ -304,20 +305,64 @@ export const StorefrontView = ({ onSelectProduct, onOpenStore }) => {
                       </div>
                     </div>
 
-                    <button
-                      disabled={product.stock === 0}
-                      onClick={(e) => handleAddToCart(product, e)}
-                      className={`px-4 py-2 rounded-xl text-xs font-display font-black border-2 border-black transition ${
-                        product.stock > 0
-                          ? 'bg-[#FEF08A] dark:bg-[#FFE600] text-black hover:bg-[#FDE047] dark:hover:bg-[#FFF500] shadow-brutal-sm hover:translate-x-[-1px] hover:translate-y-[-1px]'
-                          : 'bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed border-slate-400'
-                      }`}
-                    >
-                      <div className="flex items-center space-x-1">
-                        <Plus className="w-3.5 h-3.5" />
-                        <span>Add</span>
-                      </div>
-                    </button>
+                    {/* Dynamic Add / Quantity Stepper Button */}
+                    {(() => {
+                      const cartQty = getItemQuantity(product._id);
+                      if (cartQty > 0) {
+                        return (
+                          <div
+                            onClick={(e) => e.stopPropagation()}
+                            className="flex items-center bg-[#FEF08A] dark:bg-[#FFE600] border-2 border-black rounded-xl shadow-brutal-sm text-black font-black"
+                          >
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                updateQuantity(product._id, cartQty - 1);
+                              }}
+                              className="px-2 py-1.5 hover:bg-[#FDE047] dark:hover:bg-[#FFF500] rounded-l-lg transition cursor-pointer"
+                              title="Decrease quantity (-1)"
+                            >
+                              <Minus className="w-3.5 h-3.5 text-black stroke-[3]" />
+                            </button>
+                            <span className="px-2 font-mono text-xs font-black text-black select-none">
+                              {cartQty}
+                            </span>
+                            <button
+                              type="button"
+                              disabled={cartQty >= product.stock}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                if (cartQty < product.stock) {
+                                  addToCart(product, 1);
+                                }
+                              }}
+                              className="px-2 py-1.5 hover:bg-[#FDE047] dark:hover:bg-[#FFF500] disabled:opacity-30 rounded-r-lg transition cursor-pointer"
+                              title="Add more (+1)"
+                            >
+                              <Plus className="w-3.5 h-3.5 text-black stroke-[3]" />
+                            </button>
+                          </div>
+                        );
+                      }
+
+                      return (
+                        <button
+                          disabled={product.stock === 0}
+                          onClick={(e) => handleAddToCart(product, e)}
+                          className={`px-4 py-2 rounded-xl text-xs font-display font-black border-2 border-black transition ${
+                            product.stock > 0
+                              ? 'bg-[#FEF08A] dark:bg-[#FFE600] text-black hover:bg-[#FDE047] dark:hover:bg-[#FFF500] shadow-brutal-sm hover:translate-x-[-1px] hover:translate-y-[-1px]'
+                              : 'bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed border-slate-400'
+                          }`}
+                        >
+                          <div className="flex items-center space-x-1">
+                            <Plus className="w-3.5 h-3.5" />
+                            <span>Add</span>
+                          </div>
+                        </button>
+                      );
+                    })()}
                   </div>
                 </div>
               </div>

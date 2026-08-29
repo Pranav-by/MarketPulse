@@ -73,6 +73,11 @@ export const CartProvider = ({ children }) => {
     return acc;
   }, {});
 
+  const getItemQuantity = (productId) => {
+    const item = items.find((i) => i.productId === productId);
+    return item ? item.quantity : 0;
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -80,6 +85,7 @@ export const CartProvider = ({ children }) => {
         addToCart,
         removeFromCart,
         updateQuantity,
+        getItemQuantity,
         clearCart,
         totalAmount,
         totalItemCount,
