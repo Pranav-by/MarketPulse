@@ -3,6 +3,26 @@ const API_BASE = rawApiUrl.endsWith('/api/v1')
   ? rawApiUrl
   : (rawApiUrl.startsWith('http') ? `${rawApiUrl.replace(/\/$/, '')}/api/v1` : rawApiUrl);
 
+const fetchWithTimeout = async (url, options = {}, timeoutMs = 20000) => {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const res = await fetch(url, {
+      ...options,
+      signal: controller.signal,
+    });
+    clearTimeout(timeoutId);
+    return res;
+  } catch (error) {
+    clearTimeout(timeoutId);
+    if (error.name === 'AbortError') {
+      throw new Error('Connection timed out. The backend server might be waking up, please try again in a few seconds.');
+    }
+    throw error;
+  }
+};
+
 const getHeaders = (idempotencyKey = null) => {
   const token = localStorage.getItem('mp_token');
   const headers = {
@@ -20,28 +40,48 @@ const getHeaders = (idempotencyKey = null) => {
 export const api = {
   // Auth
   async login(email, password) {
-    const res = await fetch(`${API_BASE}/auth/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    });
-    return res.json();
+    try {
+      const res = await fetchWithTimeout(`${API_BASE}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim().toLowerCase(), password }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        return { success: false, message: data.message || 'Invalid email or password' };
+      }
+      return data;
+    } catch (err) {
+      return { success: false, message: err.message || 'Network error connecting to backend' };
+    }
   },
 
   async register(name, email, password, role, storeName) {
-    const res = await fetch(`${API_BASE}/auth/register`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, password, role, storeName }),
-    });
-    return res.json();
+    try {
+      const res = await fetchWithTimeout(`${API_BASE}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email: email.trim().toLowerCase(), password, role, storeName }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        return { success: false, message: data.message || 'Registration failed' };
+      }
+      return data;
+    } catch (err) {
+      return { success: false, message: err.message || 'Network error connecting to backend' };
+    }
   },
 
   async getMe() {
-    const res = await fetch(`${API_BASE}/auth/me`, {
-      headers: getHeaders(),
-    });
-    return res.json();
+    try {
+      const res = await fetchWithTimeout(`${API_BASE}/auth/me`, {
+        headers: getHeaders(),
+      }, 8000);
+      return res.json();
+    } catch (err) {
+      return { success: false, message: err.message };
+    }
   },
 
   // Wishlist

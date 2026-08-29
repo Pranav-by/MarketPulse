@@ -209,16 +209,47 @@ export const AuthPage = () => {
                 )}
               </button>
 
-              <div className="p-3 bg-[#EBF3FE] dark:bg-[#1A1E30] border-2 border-black rounded-2xl text-[11px] font-mono text-black dark:text-slate-300 space-y-1">
-                <div className="font-bold flex items-center space-x-1 text-black dark:text-white">
-                  <Sparkles className="w-3.5 h-3.5 text-black dark:text-[#FFE600]" />
-                  <span>Seeded Accounts Available:</span>
+              <div className="p-3 bg-[#EBF3FE] dark:bg-[#1A1E30] border-2 border-black rounded-2xl text-[11px] font-mono text-black dark:text-slate-300 space-y-2">
+                <div className="font-bold flex items-center justify-between text-black dark:text-white">
+                  <div className="flex items-center space-x-1">
+                    <Sparkles className="w-3.5 h-3.5 text-black dark:text-[#FFE600]" />
+                    <span>Quick Demo 1-Click Sign In:</span>
+                  </div>
                 </div>
-                <div className="text-[10px]">
-                  Customer: <span className="font-bold text-black dark:text-white">customer@marketpulse.io</span> (Pass: <span className="font-bold text-black dark:text-white">Password123!</span>)
-                </div>
-                <div className="text-[10px]">
-                  Admin: <span className="font-bold text-black dark:text-white">admin@marketpulse.io</span> (Pass: <span className="font-bold text-black dark:text-white">Password123!</span>)
+                <div className="grid grid-cols-3 gap-1.5 pt-1">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setLoginEmail('customer@marketpulse.io');
+                      setLoginPassword('Password123!');
+                      login('customer@marketpulse.io', 'Password123!');
+                    }}
+                    className="px-2 py-1.5 rounded-lg bg-[#C4B5FD] dark:bg-[#B026FF] text-black dark:text-white text-[10px] font-bold border border-black shadow-[1px_1px_0px_0px_#000] hover:translate-x-[-1px] transition text-center"
+                  >
+                    👤 Customer
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setLoginEmail('vendor.tech@marketpulse.io');
+                      setLoginPassword('Password123!');
+                      login('vendor.tech@marketpulse.io', 'Password123!');
+                    }}
+                    className="px-2 py-1.5 rounded-lg bg-[#6EE7B7] dark:bg-[#00FF87] text-black text-[10px] font-bold border border-black shadow-[1px_1px_0px_0px_#000] hover:translate-x-[-1px] transition text-center"
+                  >
+                    🏪 Vendor
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setLoginEmail('admin@marketpulse.io');
+                      setLoginPassword('Password123!');
+                      login('admin@marketpulse.io', 'Password123!');
+                    }}
+                    className="px-2 py-1.5 rounded-lg bg-[#FEF08A] dark:bg-[#FFE600] text-black text-[10px] font-bold border border-black shadow-[1px_1px_0px_0px_#000] hover:translate-x-[-1px] transition text-center"
+                  >
+                    🛡️ Admin
+                  </button>
                 </div>
               </div>
             </form>

@@ -8,15 +8,17 @@ export const connectDB = async () => {
     }
 
     const conn = await mongoose.connect(connStr, {
-      serverSelectionTimeoutMS: 8000,
+      serverSelectionTimeoutMS: 10000,
+      socketTimeoutMS: 45000,
+      maxPoolSize: 10,
+      minPoolSize: 2,
+      family: 4, // Force IPv4 to prevent IPv6 DNS lookup delays
     });
 
     console.log(`✅ MongoDB Connected: ${conn.connection.host} / Database: ${conn.connection.name}`);
     return conn;
   } catch (error) {
     console.error(`❌ MongoDB Connection Error: ${error.message}`);
-    // If running in development without live Atlas access, continue with warning or retry
-    console.warn('⚠️ Server will attempt reconnection on requests or continue in degraded mode.');
     throw error;
   }
 };
