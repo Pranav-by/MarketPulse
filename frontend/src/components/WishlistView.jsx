@@ -21,65 +21,67 @@ export const WishlistView = ({ onGoToStore, onSelectProduct }) => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-fade-in">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 animate-pop-in">
       {/* Header */}
-      <div className="neo-card p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-[#FF6B97] border-3 border-black rounded-3xl p-6 sm:p-8 shadow-brutal-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-white">
         <div>
-          <div className="flex items-center space-x-2">
-            <span className="neo-badge neo-badge-rose">Saved Items</span>
-            <span className="text-[10px] font-mono text-slate-500">{wishlistProducts.length} Products</span>
+          <div className="inline-flex items-center space-x-2 bg-black text-white px-3 py-1 rounded-full text-xs font-mono font-bold">
+            <Heart className="w-3.5 h-3.5 fill-current text-[#FF6B97]" />
+            <span>SAVED FAVORITES ({wishlistProducts.length})</span>
           </div>
-          <h1 className="text-xl font-bold text-white mt-1">My Wishlist</h1>
-          <p className="text-xs text-slate-400">
-            Products saved for later across multiple verified stores
+          <h1 className="text-2xl sm:text-3xl font-display font-black text-white mt-2">
+            My Wishlist
+          </h1>
+          <p className="text-xs sm:text-sm font-bold text-white/90 mt-1">
+            Products saved for later across multiple verified creator stores
           </p>
         </div>
 
         <button
           onClick={onGoToStore}
-          className="neo-btn-secondary text-xs flex items-center space-x-1.5 self-start sm:self-auto"
+          className="px-4 py-2.5 rounded-xl bg-white border-2 border-black text-black font-display font-black text-xs shadow-brutal flex items-center space-x-1.5 self-start sm:self-auto hover:bg-[#FEF08A] transition"
         >
           <span>Continue Shopping</span>
-          <ArrowRight className="w-3.5 h-3.5" />
+          <ArrowRight className="w-4 h-4" />
         </button>
       </div>
 
       {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="neo-card p-5 h-64 animate-pulse bg-white/[0.02]" />
+            <div key={i} className="bg-white border-3 border-black rounded-2xl p-5 h-64 animate-pulse shadow-brutal" />
           ))}
         </div>
       ) : wishlistProducts.length === 0 ? (
-        <div className="text-center py-16 neo-card space-y-3">
-          <div className="w-12 h-12 rounded-2xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center mx-auto text-rose-400">
-            <Heart className="w-6 h-6" />
+        <div className="text-center py-16 bg-white border-3 border-black rounded-3xl p-8 shadow-brutal space-y-3">
+          <div className="w-14 h-14 rounded-2xl bg-[#FF6B97] border-2.5 border-black shadow-brutal flex items-center justify-center mx-auto text-white">
+            <Heart className="w-7 h-7 fill-current" />
           </div>
-          <h3 className="text-sm font-semibold text-slate-300">Your wishlist is empty</h3>
-          <p className="text-xs text-slate-500 max-w-sm mx-auto">
+          <h3 className="text-base font-display font-black text-black">Your wishlist is empty</h3>
+          <p className="text-xs font-bold text-black/70 max-w-sm mx-auto">
             Click the heart icon on any product in the catalog to save it for later.
           </p>
           <button
             onClick={onGoToStore}
-            className="neo-btn-primary text-xs inline-flex items-center space-x-1.5"
+            className="neo-btn-primary text-xs inline-flex items-center space-x-1.5 mt-2"
           >
             <span>Explore Catalog</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            <ArrowRight className="w-4 h-4" />
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {wishlistProducts.map((product) => (
             <div
               key={product._id}
               onClick={() => onSelectProduct(product)}
-              className="neo-card-interactive overflow-hidden cursor-pointer flex flex-col justify-between group"
+              className="bg-white border-3 border-black rounded-2xl shadow-brutal hover:shadow-brutal-lg hover:translate-x-[-2px] hover:translate-y-[-2px] transition duration-150 cursor-pointer flex flex-col justify-between overflow-hidden group"
             >
-              <div className="relative h-48 w-full bg-[#0a0c12] overflow-hidden border-b border-white/[0.06]">
+              <div className="relative h-48 w-full bg-[#F3F4F6] overflow-hidden border-b-3 border-black">
                 <img
                   src={product.images?.[0] || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80'}
                   alt={product.title}
-                  className="w-full h-full object-cover group-hover:scale-102 transition duration-300 opacity-90 group-hover:opacity-100"
+                  className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
                 />
 
                 <button
@@ -88,36 +90,36 @@ export const WishlistView = ({ onGoToStore, onSelectProduct }) => {
                     e.stopPropagation();
                     toggleWishlist(product);
                   }}
-                  className="absolute top-2.5 right-2.5 p-2 rounded-xl bg-rose-500/20 text-rose-400 border border-rose-500/30 hover:bg-rose-500/30 transition"
+                  className="absolute top-3 right-3 p-2 rounded-xl bg-[#FF6B97] text-white border-2 border-black shadow-brutal-sm hover:scale-110 transition"
                   title="Remove from wishlist"
                 >
-                  <Heart className="w-3.5 h-3.5 fill-current" />
+                  <Heart className="w-4 h-4 fill-current" />
                 </button>
               </div>
 
-              <div className="p-4 space-y-3 flex-1 flex flex-col justify-between">
+              <div className="p-5 space-y-3 flex-1 flex flex-col justify-between">
                 <div>
-                  <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 mb-1">
-                    <span>{product.category}</span>
-                    <div className="flex items-center space-x-1 text-slate-300">
-                      <Star className="w-3 h-3 text-amber-400 fill-current" />
+                  <div className="flex items-center justify-between text-[11px] font-mono font-bold text-black mb-1">
+                    <span className="px-2 py-0.5 rounded-md bg-[#C4B5FD] border border-black uppercase tracking-wider">{product.category}</span>
+                    <div className="flex items-center space-x-1 px-2 py-0.5 rounded-md bg-[#FEF08A] border border-black">
+                      <Star className="w-3 h-3 text-black fill-current" />
                       <span>{product.rating}</span>
                     </div>
                   </div>
 
-                  <h3 className="text-sm font-bold text-slate-100 line-clamp-1 group-hover:text-white transition">
+                  <h3 className="text-base font-display font-black text-black line-clamp-1 mt-2">
                     {product.title}
                   </h3>
-                  <p className="text-xs text-slate-400 line-clamp-2 mt-1 leading-relaxed">
+                  <p className="text-xs font-semibold text-black/70 line-clamp-2 mt-1 leading-relaxed">
                     {product.description}
                   </p>
                 </div>
 
-                <div className="pt-3 border-t border-white/[0.06] flex items-center justify-between">
+                <div className="pt-3 border-t-2 border-black flex items-center justify-between">
                   <div>
-                    <span className="text-base font-black text-white font-mono">${product.price?.toFixed(2)}</span>
-                    <div className="text-[10px] font-mono text-slate-500">
-                      Stock: <span className={product.stock > 0 ? 'text-slate-300' : 'text-rose-400'}>{product.stock} units</span>
+                    <span className="text-base font-black text-black font-mono">${product.price?.toFixed(2)}</span>
+                    <div className="text-[10px] font-mono font-bold text-black/70">
+                      Stock: <span className={product.stock > 0 ? 'text-black font-black' : 'text-rose-600 font-black'}>{product.stock} units</span>
                     </div>
                   </div>
 
@@ -127,7 +129,7 @@ export const WishlistView = ({ onGoToStore, onSelectProduct }) => {
                       e.stopPropagation();
                       handleMoveToCart(product);
                     }}
-                    className="neo-btn-primary text-xs flex items-center space-x-1.5"
+                    className="px-4 py-2 rounded-xl bg-[#6EE7B7] hover:bg-[#34D399] text-black font-display font-black text-xs border-2 border-black shadow-brutal-sm flex items-center space-x-1.5 transition"
                   >
                     <ShoppingBag className="w-3.5 h-3.5" />
                     <span>Move to Cart</span>

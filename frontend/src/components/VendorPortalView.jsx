@@ -1,28 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import { CreateProductModal } from './CreateProductModal';
 import {
   Store,
   DollarSign,
   Package,
-  Clock,
-  Truck,
-  CheckCircle2,
   TrendingUp,
-  RefreshCw,
+  Clock,
+  CheckCircle2,
+  Truck,
   Plus,
+  RefreshCw,
+  AlertCircle,
+  ExternalLink,
+  ShieldAlert,
 } from 'lucide-react';
-import { CreateProductModal } from './CreateProductModal';
 
 export const VendorPortalView = () => {
   const { user } = useAuth();
   const [dashboard, setDashboard] = useState(null);
   const [subOrders, setSubOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [updatingId, setUpdatingId] = useState(null);
   const [isAddProductOpen, setIsAddProductOpen] = useState(false);
+  const [updatingId, setUpdatingId] = useState(null);
+  const [trackingInputs, setTrackingInputs] = useState({});
 
-  const fetchData = async () => {
+  const fetchVendorData = async () => {
     setLoading(true);
     try {
       const [dashRes, ordersRes] = await Promise.all([
@@ -40,20 +44,21 @@ export const VendorPortalView = () => {
   };
 
   useEffect(() => {
-    fetchData();
+    fetchVendorData();
   }, [user]);
 
-  const handleStatusUpdate = async (orderId, subOrderId, newStatus) => {
+  const handleUpdateStatus = async (orderId, subOrderId, nextStatus) => {
     setUpdatingId(subOrderId);
     try {
-      const tracking = 'TRK-' + Math.floor(100000 + Math.random() * 900000);
+      const tracking = trackingInputs[subOrderId] || {};
       const res = await api.updateSubOrderStatus(orderId, subOrderId, {
-        status: newStatus,
-        trackingNumber: tracking,
-        carrier: 'FedEx Express',
+        status: nextStatus,
+        carrier: tracking.carrier || 'Courier Express',
+        trackingNumber: tracking.trackingNumber || `TRK-${Math.floor(100000 + Math.random() * 900000)}`,
       });
+
       if (res.success) {
-        fetchData();
+        fetchVendorData();
       }
     } catch (err) {
       console.error('Update status failed:', err);
@@ -62,191 +67,202 @@ export const VendorPortalView = () => {
     }
   };
 
-  if (user?.role === 'customer') {
+  if (user?.role !== 'vendor' && user?.role !== 'admin') {
     return (
-      <div className="max-w-4xl mx-auto px-4 py-16 text-center space-y-3 animate-fade-in">
-        <div className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center mx-auto text-slate-400">
-          <Store className="w-5 h-5" />
-        </div>
-        <h2 className="text-base font-bold text-white">Vendor Portal</h2>
-        <p className="text-xs text-slate-400 max-w-sm mx-auto">
-          This section is restricted to vendor accounts. Register as a vendor to access your store dashboard, manage products, and fulfill orders.
+      <div className="max-w-4xl mx-auto px-4 py-16 text-center bg-white border-3 border-black rounded-3xl p-8 shadow-brutal space-y-3">
+        <ShieldAlert className="w-12 h-12 text-black mx-auto" />
+        <h2 className="text-lg font-display font-black text-black">Vendor Access Restricted</h2>
+        <p className="text-xs font-bold text-black/70 max-w-sm mx-auto">
+          This portal is reserved for merchant store owners to manage catalogs and order fulfillments.
         </p>
       </div>
     );
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6 animate-fade-in">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 animate-pop-in">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 neo-card p-6">
+      <div className="bg-[#6EE7B7] border-3 border-black rounded-3xl p-6 sm:p-8 shadow-brutal-xl flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center space-x-2">
-            <span className="neo-badge neo-badge-emerald">Vendor</span>
-            <span className="text-[10px] text-slate-500">
-              Commission: {((dashboard?.store?.commissionRate || 0.1) * 100).toFixed(0)}%
+            <span className="px-2.5 py-0.5 rounded-lg bg-black text-white text-xs font-mono font-black">VENDOR HUB</span>
+            <span className="text-xs font-mono font-bold text-black bg-white px-2 py-0.5 rounded border border-black">
+              Take-Rate: {((dashboard?.store?.commissionRate || 0.1) * 100).toFixed(0)}%
             </span>
           </div>
-          <h1 className="text-xl font-bold text-white mt-1">{dashboard?.store?.name || 'My Store'}</h1>
-          <p className="text-xs text-slate-400">
-            Manage your products, fulfill orders, and track earnings
+          <h1 className="text-2xl sm:text-3xl font-display font-black text-black mt-2">
+            {dashboard?.store?.name || 'My Store Workspace'}
+          </h1>
+          <p className="text-xs sm:text-sm font-bold text-black/80 mt-1">
+            Real-time sub-order fulfillment pipeline, catalog management, and earnings
           </p>
         </div>
 
         <div className="flex items-center space-x-2.5 self-start sm:self-auto">
           <button
             onClick={() => setIsAddProductOpen(true)}
-            className="neo-btn-primary text-xs flex items-center space-x-1.5"
+            className="px-4 py-2.5 rounded-xl bg-[#FEF08A] hover:bg-[#FDE047] text-black font-display font-black text-xs border-2.5 border-black shadow-brutal flex items-center space-x-1.5 transition"
           >
-            <Plus className="w-3.5 h-3.5" />
+            <Plus className="w-4 h-4" />
             <span>Add Product</span>
           </button>
 
           <button
-            onClick={fetchData}
-            className="neo-btn-secondary text-xs flex items-center space-x-1.5"
+            onClick={fetchVendorData}
+            disabled={loading}
+            className="p-2.5 rounded-xl bg-white border-2.5 border-black shadow-brutal hover:bg-slate-100 transition text-black"
           >
-            <RefreshCw className="w-3.5 h-3.5" />
-            <span>Refresh</span>
+            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
           </button>
         </div>
       </div>
 
       {/* Bento KPIs */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="neo-card p-4 space-y-1">
-          <div className="text-[10px] font-mono text-slate-500 uppercase tracking-wider">Settled Payout Balance</div>
-          <div className="text-xl font-black font-mono text-white">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div className="bg-[#FEF08A] border-3 border-black rounded-2xl p-5 shadow-brutal space-y-1">
+          <div className="text-[11px] font-mono uppercase font-black text-black">Settled Balance</div>
+          <div className="text-2xl font-black font-mono text-black">
             ${(dashboard?.stats?.currentBalance || 0).toFixed(2)}
           </div>
-          <div className="text-[10px] font-mono text-emerald-400">Available for payout</div>
+          <div className="text-[10px] font-mono font-bold text-black/70">Available for payout</div>
         </div>
 
-        <div className="neo-card p-4 space-y-1">
-          <div className="text-[10px] font-mono text-slate-500 uppercase tracking-wider">Lifetime Gross GMV</div>
-          <div className="text-xl font-black font-mono text-white">
+        <div className="bg-[#FFFFFF] border-3 border-black rounded-2xl p-5 shadow-brutal space-y-1">
+          <div className="text-[11px] font-mono uppercase font-black text-black">Lifetime GMV</div>
+          <div className="text-2xl font-black font-mono text-black">
             ${(dashboard?.stats?.lifetimeSales || 0).toFixed(2)}
           </div>
-          <div className="text-[10px] font-mono text-slate-400">From customer sub-orders</div>
+          <div className="text-[10px] font-mono font-bold text-black/70">From customer orders</div>
         </div>
 
-        <div className="neo-card p-4 space-y-1">
-          <div className="text-[10px] font-mono text-slate-500 uppercase tracking-wider">Pending Fulfillments</div>
-          <div className="text-xl font-black font-mono text-amber-400">
+        <div className="bg-[#FF6B97] text-white border-3 border-black rounded-2xl p-5 shadow-brutal space-y-1">
+          <div className="text-[11px] font-mono uppercase font-black text-white">Pending Orders</div>
+          <div className="text-2xl font-black font-mono text-white">
             {dashboard?.stats?.pendingFulfillment || 0}
           </div>
-          <div className="text-[10px] font-mono text-amber-400">Requires dispatch</div>
+          <div className="text-[10px] font-mono font-bold text-white/90">Requires dispatch</div>
         </div>
 
-        <div className="neo-card p-4 space-y-1">
-          <div className="text-[10px] font-mono text-slate-500 uppercase tracking-wider">Active Catalog SKUs</div>
-          <div className="text-xl font-black font-mono text-white">
+        <div className="bg-[#C4B5FD] border-3 border-black rounded-2xl p-5 shadow-brutal space-y-1">
+          <div className="text-[11px] font-mono uppercase font-black text-black">Active Products</div>
+          <div className="text-2xl font-black font-mono text-black">
             {dashboard?.stats?.productCount || 0}
           </div>
-          <div className="text-[10px] font-mono text-slate-400">Products in catalog</div>
+          <div className="text-[10px] font-mono font-bold text-black/70">Indexed in catalog</div>
         </div>
       </div>
 
-      {/* Partitioned Sub-Orders Pipeline */}
-      <div className="neo-card p-6 space-y-4">
-        <div className="flex items-center justify-between border-b border-white/[0.06] pb-3">
+      {/* Fulfillment Pipeline */}
+      <div className="bg-white border-3 border-black rounded-3xl p-6 shadow-brutal-xl space-y-5">
+        <div className="flex items-center justify-between border-b-2 border-black pb-3">
           <div>
-            <h2 className="text-sm font-bold text-white">Fulfillment Pipeline</h2>
-            <p className="text-xs text-slate-400">Routed sub-orders requiring merchant fulfillment</p>
+            <h2 className="text-lg font-display font-black text-black">Fulfillment Pipeline</h2>
+            <p className="text-xs font-bold text-black/70">Routed sub-orders requiring merchant packaging & dispatch</p>
           </div>
-          <span className="text-[10px] font-mono text-slate-500">{subOrders.length} Sub-Orders</span>
+          <span className="text-xs font-mono font-black bg-[#FEF08A] px-3 py-1 rounded-xl border-2 border-black">{subOrders.length} Sub-Orders</span>
         </div>
 
         {subOrders.length === 0 ? (
-          <div className="text-center py-10 text-slate-500 text-xs font-mono">No sub-orders in pipeline.</div>
+          <div className="text-center py-12 text-black space-y-2">
+            <Package className="w-10 h-10 mx-auto opacity-40" />
+            <p className="font-display font-black text-sm">No incoming orders for this store right now.</p>
+          </div>
         ) : (
-          <div className="space-y-3">
-            {subOrders.map(({ orderId, orderNumber, createdAt, customerInfo, subOrder }) => (
+          <div className="space-y-4">
+            {subOrders.map((so) => (
               <div
-                key={subOrder._id}
-                className="p-4 rounded-xl bg-white/[0.02] border border-white/[0.06] space-y-3"
+                key={so._id}
+                className="p-5 rounded-2xl bg-[#F9FAFB] border-2.5 border-black shadow-brutal space-y-4 text-xs font-bold text-black"
               >
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/[0.04] pb-2 text-xs">
-                  <div className="flex items-center space-x-2">
-                    <span className="font-mono font-bold text-white">#{orderNumber}</span>
-                    <span className="text-slate-400">• Customer: {customerInfo?.name}</span>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b-2 border-black pb-3">
+                  <div className="space-y-1">
+                    <div className="flex items-center space-x-2">
+                      <span className="text-sm font-mono font-black">Order #{so.orderNumber}</span>
+                      <span
+                        className={`px-2.5 py-0.5 rounded-lg border-2 border-black text-xs font-mono font-black ${
+                          so.status === 'DELIVERED'
+                            ? 'bg-[#6EE7B7]'
+                            : so.status === 'SHIPPED'
+                            ? 'bg-[#C4B5FD]'
+                            : so.status === 'CANCELLED'
+                            ? 'bg-[#FF6B97] text-white'
+                            : 'bg-[#FEF08A]'
+                        }`}
+                      >
+                        {so.status}
+                      </span>
+                    </div>
+                    <div className="text-[11px] font-mono text-black/70">
+                      Customer: {so.customerInfo?.name} ({so.customerInfo?.city}, {so.customerInfo?.postalCode})
+                    </div>
                   </div>
-                  <span
-                    className={`neo-badge ${
-                      subOrder.status === 'DELIVERED'
-                        ? 'neo-badge-emerald'
-                        : subOrder.status === 'SHIPPED'
-                        ? 'neo-badge-indigo'
-                        : 'neo-badge-amber'
-                    }`}
-                  >
-                    {subOrder.status}
-                  </span>
+
+                  <div className="text-right font-mono">
+                    <div className="text-base font-black">${so.subTotal?.toFixed(2)}</div>
+                    <div className="text-[10px] text-black/70">
+                      Payout: <span className="font-bold text-black">${so.vendorPayout?.toFixed(2)}</span>
+                    </div>
+                  </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-                  <div className="space-y-1.5">
-                    {subOrder.items.map((item, idx) => (
-                      <div key={idx} className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          <img src={item.image} alt={item.title} className="w-7 h-7 rounded-md object-cover bg-white/[0.03]" />
-                          <span className="text-slate-300 line-clamp-1 max-w-[140px]">{item.title}</span>
-                        </div>
-                        <span className="font-mono text-slate-400 text-[10px]">
-                          {item.quantity}x • ${item.price.toFixed(2)}
-                        </span>
+                {/* Items */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {so.items?.map((item, idx) => (
+                    <div key={idx} className="flex items-center justify-between p-2.5 rounded-xl bg-white border-2 border-black">
+                      <div className="flex items-center space-x-2.5">
+                        <img
+                          src={item.image}
+                          alt={item.title}
+                          className="w-8 h-8 rounded-lg object-cover border border-black"
+                        />
+                        <span className="font-display font-bold line-clamp-1 max-w-[140px]">{item.title}</span>
                       </div>
-                    ))}
+                      <span className="font-mono text-xs font-black">
+                        {item.quantity}x • ${item.price.toFixed(2)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* State Machine Transition Buttons */}
+                <div className="pt-3 border-t-2 border-black flex flex-wrap items-center justify-between gap-3">
+                  <div className="flex items-center space-x-2 text-xs font-mono">
+                    <span className="text-black/70 font-bold">Tracking:</span>
+                    <span className="font-black bg-white px-2 py-0.5 rounded border border-black">
+                      {so.trackingNumber || 'Awaiting dispatch'}
+                    </span>
                   </div>
 
-                  <div className="p-3 rounded-lg bg-black/30 border border-white/[0.04] flex flex-col justify-between space-y-2 font-mono text-[11px]">
-                    <div className="flex justify-between text-slate-400">
-                      <span>Sub-Total:</span>
-                      <span className="text-white">${subOrder.subTotal.toFixed(2)}</span>
-                    </div>
-                    <div className="flex justify-between text-slate-400">
-                      <span>Platform Take-Rate:</span>
-                      <span className="text-rose-400">-${subOrder.platformFee.toFixed(2)}</span>
-                    </div>
-                    <div className="flex justify-between font-bold border-t border-white/[0.06] pt-1">
-                      <span className="text-emerald-400">Net Proceeds:</span>
-                      <span className="text-emerald-400">${subOrder.vendorPayout.toFixed(2)}</span>
-                    </div>
+                  <div className="flex items-center space-x-2">
+                    {so.status === 'PAID' && (
+                      <button
+                        disabled={updatingId === so._id}
+                        onClick={() => handleUpdateStatus(so.orderId, so._id, 'PROCESSING')}
+                        className="px-3.5 py-1.5 rounded-xl bg-[#FEF08A] hover:bg-[#FDE047] text-black font-display font-black border-2 border-black shadow-brutal-sm"
+                      >
+                        Start Packing
+                      </button>
+                    )}
 
-                    <div className="pt-1">
-                      {subOrder.status === 'PAID' && (
-                        <button
-                          disabled={updatingId === subOrder._id}
-                          onClick={() => handleStatusUpdate(orderId, subOrder._id, 'PROCESSING')}
-                          className="w-full py-1 rounded-md neo-btn-secondary text-[10px] font-mono"
-                        >
-                          Mark Processing
-                        </button>
-                      )}
-                      {subOrder.status === 'PROCESSING' && (
-                        <button
-                          disabled={updatingId === subOrder._id}
-                          onClick={() => handleStatusUpdate(orderId, subOrder._id, 'SHIPPED')}
-                          className="w-full py-1 rounded-md neo-btn-primary text-[10px] font-mono"
-                        >
-                          Dispatch & Attach Tracking
-                        </button>
-                      )}
-                      {subOrder.status === 'SHIPPED' && (
-                        <button
-                          disabled={updatingId === subOrder._id}
-                          onClick={() => handleStatusUpdate(orderId, subOrder._id, 'DELIVERED')}
-                          className="w-full py-1 rounded-md neo-btn-secondary text-[10px] font-mono"
-                        >
-                          Confirm Delivery
-                        </button>
-                      )}
-                      {subOrder.status === 'DELIVERED' && (
-                        <div className="text-center text-emerald-400 text-[10px] font-mono">
-                          ✓ Settled & Complete
-                        </div>
-                      )}
-                    </div>
+                    {so.status === 'PROCESSING' && (
+                      <button
+                        disabled={updatingId === so._id}
+                        onClick={() => handleUpdateStatus(so.orderId, so._id, 'SHIPPED')}
+                        className="px-3.5 py-1.5 rounded-xl bg-[#C4B5FD] hover:bg-[#A78BFA] text-black font-display font-black border-2 border-black shadow-brutal-sm"
+                      >
+                        Dispatch Carrier
+                      </button>
+                    )}
+
+                    {so.status === 'SHIPPED' && (
+                      <button
+                        disabled={updatingId === so._id}
+                        onClick={() => handleUpdateStatus(so.orderId, so._id, 'DELIVERED')}
+                        className="px-3.5 py-1.5 rounded-xl bg-[#6EE7B7] hover:bg-[#34D399] text-black font-display font-black border-2 border-black shadow-brutal-sm"
+                      >
+                        Mark Delivered
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
@@ -255,10 +271,14 @@ export const VendorPortalView = () => {
         )}
       </div>
 
+      {/* Modal */}
       <CreateProductModal
         isOpen={isAddProductOpen}
         onClose={() => setIsAddProductOpen(false)}
-        onProductCreated={() => fetchData()}
+        onProductCreated={() => {
+          setIsAddProductOpen(false);
+          fetchVendorData();
+        }}
       />
     </div>
   );

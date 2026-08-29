@@ -91,36 +91,36 @@ export const ProductDetailModal = ({ product: initialProduct, onClose, onOpenSto
   const reviews = product.reviews || [];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in">
-      <div className="absolute inset-0 bg-black/75 backdrop-blur-xs" onClick={onClose} />
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-pop-in">
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-xs" onClick={onClose} />
 
-      <div className="relative w-full max-w-2xl bg-[#0d0f17] border border-white/[0.1] rounded-2xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+      <div className="relative w-full max-w-2xl bg-white border-3 border-black rounded-3xl shadow-brutal-xl overflow-hidden max-h-[90vh] flex flex-col z-10">
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-3.5 right-3.5 z-10 p-1.5 rounded-lg bg-black/60 text-slate-400 hover:text-white border border-white/[0.1] transition"
+          className="absolute top-4 right-4 z-20 p-2 rounded-xl bg-white border-2 border-black text-black hover:bg-[#FF6B97] hover:text-white transition shadow-brutal-sm"
         >
           <X className="w-4 h-4" />
         </button>
 
         {/* Tab Headers */}
-        <div className="flex border-b border-white/[0.06] bg-[#090a0f] px-6 pt-3 gap-4 text-xs font-semibold">
+        <div className="flex border-b-3 border-black bg-[#FEF08A] px-6 pt-4 gap-3 text-xs font-display font-black">
           <button
             onClick={() => setActiveTab('details')}
-            className={`pb-2.5 transition border-b-2 ${
+            className={`pb-2.5 px-4 rounded-t-xl transition border-2 border-b-0 border-black ${
               activeTab === 'details'
-                ? 'text-white border-white'
-                : 'text-slate-400 border-transparent hover:text-slate-200'
+                ? 'bg-white text-black shadow-xs'
+                : 'bg-transparent text-black/70 hover:text-black'
             }`}
           >
             Product Details
           </button>
           <button
             onClick={() => setActiveTab('reviews')}
-            className={`pb-2.5 transition border-b-2 flex items-center space-x-1.5 ${
+            className={`pb-2.5 px-4 rounded-t-xl transition border-2 border-b-0 border-black flex items-center space-x-1.5 ${
               activeTab === 'reviews'
-                ? 'text-white border-white'
-                : 'text-slate-400 border-transparent hover:text-slate-200'
+                ? 'bg-white text-black shadow-xs'
+                : 'bg-transparent text-black/70 hover:text-black'
             }`}
           >
             <span>Verified Reviews ({reviews.length})</span>
@@ -128,41 +128,47 @@ export const ProductDetailModal = ({ product: initialProduct, onClose, onOpenSto
         </div>
 
         {/* Body Content */}
-        <div className="overflow-y-auto flex-1">
+        <div className="overflow-y-auto flex-1 p-6 bg-white">
           {activeTab === 'details' ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               {/* Product Image */}
-              <div className="relative h-64 sm:h-full bg-black/50 border-r border-white/[0.06] flex items-center justify-center p-4">
+              <div className="relative h-64 sm:h-full bg-[#F3F4F6] border-2.5 border-black rounded-2xl flex items-center justify-center p-4 shadow-brutal-sm overflow-hidden">
                 <img
                   src={product.images[0]}
                   alt={product.title}
-                  className="max-h-72 w-full object-contain rounded-lg"
+                  className="max-h-64 w-full object-contain"
                 />
               </div>
 
               {/* Product Details & Purchase Form */}
-              <div className="p-6 space-y-4 flex flex-col justify-between text-xs">
+              <div className="space-y-4 flex flex-col justify-between text-xs font-bold text-black">
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between text-slate-400 font-mono text-[10px]">
-                    <span className="px-2 py-0.5 rounded bg-white/[0.04] border border-white/[0.06] uppercase tracking-wider">{product.category}</span>
+                  <div className="flex items-center justify-between text-black font-mono text-[10px]">
+                    <span className="px-2.5 py-0.5 rounded-lg bg-[#C4B5FD] border-2 border-black font-black uppercase tracking-wider">
+                      {product.category}
+                    </span>
                     <button
                       onClick={() => setActiveTab('reviews')}
-                      className="flex items-center space-x-1 text-slate-300 hover:underline"
+                      className="flex items-center space-x-1 px-2 py-0.5 rounded-lg bg-[#FEF08A] border border-black hover:underline"
                     >
-                      <Star className="w-3.5 h-3.5 text-amber-400 fill-current" />
-                      <span className="font-bold">{product.rating}</span>
-                      <span className="text-slate-500">({reviews.length} reviews)</span>
+                      <Star className="w-3.5 h-3.5 text-black fill-current" />
+                      <span className="font-black">{product.rating}</span>
+                      <span className="opacity-70">({reviews.length} reviews)</span>
                     </button>
                   </div>
 
-                  <h2 className="text-base sm:text-lg font-bold text-white leading-snug">{product.title}</h2>
-                  <p className="text-slate-400 leading-relaxed text-xs">{product.description}</p>
+                  <h2 className="text-lg sm:text-xl font-display font-black text-black leading-snug">
+                    {product.title}
+                  </h2>
+                  <p className="text-black/70 font-semibold leading-relaxed text-xs">
+                    {product.description}
+                  </p>
 
                   {/* Vendor Attribution */}
-                  <div className="p-2.5 rounded-xl bg-white/[0.02] border border-white/[0.06] flex items-center justify-between text-[11px]">
+                  <div className="p-3 rounded-xl bg-[#EBF3FE] border-2 border-black flex items-center justify-between text-xs shadow-brutal-sm">
                     <div className="flex items-center space-x-2">
-                      <Store className="w-3.5 h-3.5 text-indigo-400" />
-                      <span className="text-slate-300">
+                      <Store className="w-4 h-4 text-black" />
+                      <span>
                         Sold by{' '}
                         <button
                           onClick={() => {
@@ -171,85 +177,87 @@ export const ProductDetailModal = ({ product: initialProduct, onClose, onOpenSto
                               onClose();
                             }
                           }}
-                          className="font-bold text-white hover:underline"
+                          className="font-black text-black underline"
                         >
                           {product.store?.name || 'Verified Store'}
                         </button>
                       </span>
                     </div>
-                    <span className="neo-badge neo-badge-emerald text-[9px]">Direct Merchant</span>
+                    <span className="px-1.5 py-0.2 rounded bg-[#6EE7B7] border border-black text-[9px] font-black uppercase">
+                      Direct
+                    </span>
                   </div>
 
                   {/* Guarantees */}
-                  <div className="grid grid-cols-2 gap-2 text-[10px] text-slate-400">
-                    <div className="flex items-center space-x-1.5 p-2 rounded-lg bg-white/[0.02] border border-white/[0.04]">
-                      <Truck className="w-3.5 h-3.5 text-emerald-400 flex-shrink-0" />
-                      <span>Free Express Delivery</span>
+                  <div className="grid grid-cols-2 gap-2 text-[10px]">
+                    <div className="flex items-center space-x-1.5 p-2 rounded-xl bg-[#6EE7B7] border-2 border-black font-black">
+                      <Truck className="w-3.5 h-3.5 text-black flex-shrink-0" />
+                      <span>Free Express</span>
                     </div>
-                    <div className="flex items-center space-x-1.5 p-2 rounded-lg bg-white/[0.02] border border-white/[0.04]">
-                      <RotateCcw className="w-3.5 h-3.5 text-indigo-400 flex-shrink-0" />
-                      <span>Easy Cancellation</span>
+                    <div className="flex items-center space-x-1.5 p-2 rounded-xl bg-[#FEF08A] border-2 border-black font-black">
+                      <RotateCcw className="w-3.5 h-3.5 text-black flex-shrink-0" />
+                      <span>Easy Cancel</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Price, Quantity & Add to Cart */}
-                <div className="pt-3 border-t border-white/[0.06] space-y-3">
+                <div className="pt-3 border-t-2 border-black space-y-3">
                   <div className="flex items-baseline justify-between font-mono">
                     <div>
-                      <span className="text-xl font-black text-white">${(product.price * quantity).toFixed(2)}</span>
+                      <span className="text-2xl font-black text-black font-mono">${(product.price * quantity).toFixed(2)}</span>
                       {product.compareAtPrice && (
-                        <span className="text-xs text-slate-500 line-through ml-2">
+                        <span className="text-xs text-black/50 line-through ml-2">
                           ${(product.compareAtPrice * quantity).toFixed(2)}
                         </span>
                       )}
                     </div>
-                    <div className="text-[10px] text-slate-400">
-                      Stock: <span className={product.stock > 0 ? 'text-emerald-400 font-bold' : 'text-rose-400'}>{product.stock} units left</span>
+                    <div className="text-[10px] font-mono font-black">
+                      Stock: <span className={product.stock > 0 ? 'text-black' : 'text-rose-600'}>{product.stock} units</span>
                     </div>
                   </div>
 
                   {/* Quantity Stepper & Add Button */}
                   <div className="flex items-center space-x-2.5">
-                    <div className="flex items-center bg-white/[0.04] border border-white/[0.08] rounded-xl p-0.5">
+                    <div className="flex items-center bg-[#FEF08A] border-2 border-black rounded-xl shadow-brutal-sm">
                       <button
                         disabled={quantity <= 1}
                         onClick={() => handleQtyChange(quantity - 1)}
-                        className="p-2 text-slate-400 hover:text-white disabled:opacity-30 transition"
+                        className="p-2 text-black hover:bg-[#FDE047] disabled:opacity-30 transition rounded-l-lg"
                       >
-                        <Minus className="w-3 h-3" />
+                        <Minus className="w-3.5 h-3.5" />
                       </button>
-                      <span className="px-3 font-mono font-bold text-white text-xs">{quantity}</span>
+                      <span className="px-3 font-mono font-black text-black text-sm">{quantity}</span>
                       <button
                         disabled={quantity >= product.stock}
                         onClick={() => handleQtyChange(quantity + 1)}
-                        className="p-2 text-slate-400 hover:text-white disabled:opacity-30 transition"
+                        className="p-2 text-black hover:bg-[#FDE047] disabled:opacity-30 transition rounded-r-lg"
                       >
-                        <Plus className="w-3 h-3" />
+                        <Plus className="w-3.5 h-3.5" />
                       </button>
                     </div>
 
                     <button
                       disabled={product.stock === 0 || added}
                       onClick={handleAdd}
-                      className={`flex-1 py-2.5 px-4 rounded-xl font-bold text-xs flex items-center justify-center space-x-1.5 transition ${
+                      className={`flex-1 py-3 px-4 rounded-xl font-display font-black text-xs border-2.5 border-black transition ${
                         added
-                          ? 'bg-emerald-500 text-white'
+                          ? 'bg-[#6EE7B7] text-black shadow-brutal'
                           : product.stock > 0
-                          ? 'neo-btn-primary'
-                          : 'bg-white/[0.03] text-slate-600 border border-white/[0.05] cursor-not-allowed'
+                          ? 'bg-[#FEF08A] hover:bg-[#FDE047] text-black shadow-brutal hover:translate-x-[-1px] hover:translate-y-[-1px]'
+                          : 'bg-slate-200 text-slate-400 cursor-not-allowed border-slate-400'
                       }`}
                     >
                       {added ? (
-                        <>
+                        <div className="flex items-center justify-center space-x-1.5">
                           <CheckCircle2 className="w-4 h-4" />
                           <span>Added to Cart!</span>
-                        </>
+                        </div>
                       ) : (
-                        <>
-                          <Plus className="w-3.5 h-3.5" />
+                        <div className="flex items-center justify-center space-x-1.5">
+                          <Plus className="w-4 h-4" />
                           <span>Add {quantity > 1 ? `(${quantity})` : ''} to Cart</span>
-                        </>
+                        </div>
                       )}
                     </button>
                   </div>
@@ -258,38 +266,40 @@ export const ProductDetailModal = ({ product: initialProduct, onClose, onOpenSto
             </div>
           ) : (
             /* --- REVIEWS TAB --- */
-            <div className="p-6 space-y-6 text-xs animate-fade-in">
+            <div className="space-y-6 text-xs font-bold text-black animate-pop-in">
               {/* Rating Summary */}
-              <div className="neo-card p-5 flex items-center justify-between">
+              <div className="bg-[#FEF08A] border-2.5 border-black rounded-2xl p-5 shadow-brutal flex items-center justify-between">
                 <div>
                   <div className="flex items-baseline space-x-2">
-                    <span className="text-3xl font-black font-mono text-white">{product.rating}</span>
-                    <span className="text-xs text-slate-400 font-mono">/ 5.0</span>
+                    <span className="text-3xl font-black font-mono text-black">{product.rating}</span>
+                    <span className="text-xs text-black/70 font-mono">/ 5.0</span>
                   </div>
-                  <div className="flex items-center space-x-1 text-amber-400 my-1">
+                  <div className="flex items-center space-x-1 text-black my-1">
                     {[1, 2, 3, 4, 5].map((s) => (
                       <Star
                         key={s}
                         className={`w-4 h-4 ${
-                          s <= Math.round(product.rating) ? 'fill-current text-amber-400' : 'text-slate-600'
+                          s <= Math.round(product.rating) ? 'fill-current text-black' : 'text-black/30'
                         }`}
                       />
                     ))}
                   </div>
-                  <div className="text-[11px] text-slate-400 font-mono">Based on {reviews.length} customer ratings</div>
+                  <div className="text-[11px] font-mono text-black/70">Based on {reviews.length} customer ratings</div>
                 </div>
 
                 <div className="text-right">
-                  <span className="neo-badge neo-badge-emerald">100% Verified Purchases</span>
+                  <span className="px-3 py-1 rounded-xl bg-white border-2 border-black text-xs font-black shadow-brutal-sm">
+                    ★ 100% Verified
+                  </span>
                 </div>
               </div>
 
               {/* Add Review Form */}
               {user ? (
-                <form onSubmit={handleSubmitReview} className="neo-card p-5 space-y-3.5">
-                  <div className="flex items-center justify-between border-b border-white/[0.06] pb-2">
-                    <h3 className="font-bold text-white flex items-center space-x-1.5">
-                      <MessageSquare className="w-3.5 h-3.5 text-indigo-400" />
+                <form onSubmit={handleSubmitReview} className="bg-white border-2.5 border-black rounded-2xl p-5 shadow-brutal space-y-3.5">
+                  <div className="flex items-center justify-between border-b-2 border-black pb-2">
+                    <h3 className="font-display font-black text-black flex items-center space-x-1.5">
+                      <MessageSquare className="w-4 h-4 text-black" />
                       <span>Write a Customer Review</span>
                     </h3>
                     <div className="flex items-center space-x-1">
@@ -298,24 +308,24 @@ export const ProductDetailModal = ({ product: initialProduct, onClose, onOpenSto
                           key={star}
                           type="button"
                           onClick={() => setNewRating(star)}
-                          className="p-0.5 text-amber-400 hover:scale-110 transition"
+                          className="p-0.5 text-black hover:scale-125 transition"
                         >
-                          <Star className={`w-4 h-4 ${star <= newRating ? 'fill-current' : 'text-slate-600'}`} />
+                          <Star className={`w-4 h-4 ${star <= newRating ? 'fill-current' : 'text-slate-300'}`} />
                         </button>
                       ))}
                     </div>
                   </div>
 
                   {reviewSuccess && (
-                    <div className="p-2.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-[11px] flex items-center space-x-1.5">
-                      <CheckCircle2 className="w-3.5 h-3.5" />
+                    <div className="p-3 rounded-xl bg-[#6EE7B7] border-2 border-black text-black text-xs font-bold flex items-center space-x-1.5">
+                      <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
                       <span>Your review has been published!</span>
                     </div>
                   )}
 
                   {reviewError && (
-                    <div className="p-2.5 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-300 text-[11px] flex items-center space-x-1.5">
-                      <AlertCircle className="w-3.5 h-3.5" />
+                    <div className="p-3 rounded-xl bg-[#FF6B97]/20 border-2 border-black text-black text-xs font-bold flex items-center space-x-1.5">
+                      <AlertCircle className="w-4 h-4 flex-shrink-0" />
                       <span>{reviewError}</span>
                     </div>
                   )}
@@ -326,56 +336,52 @@ export const ProductDetailModal = ({ product: initialProduct, onClose, onOpenSto
                     placeholder="Share your experience regarding build quality, packaging, and delivery..."
                     value={newComment}
                     onChange={(e) => setNewComment(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg bg-white/[0.03] border border-white/[0.08] text-white text-xs"
+                    className="w-full px-3 py-2 rounded-xl bg-white border-2 border-black text-black text-xs shadow-brutal-sm focus:bg-[#FEFCE8]"
                   />
 
                   <button
                     type="submit"
                     disabled={submittingReview}
-                    className="neo-btn-primary text-xs flex items-center space-x-1.5 disabled:opacity-50"
+                    className="px-4 py-2.5 rounded-xl bg-[#6EE7B7] hover:bg-[#34D399] text-black font-display font-black text-xs border-2 border-black shadow-brutal flex items-center space-x-1.5 transition disabled:opacity-50"
                   >
-                    <Send className="w-3 h-3" />
+                    <Send className="w-3.5 h-3.5" />
                     <span>{submittingReview ? 'Submitting...' : 'Post Review'}</span>
                   </button>
                 </form>
-              ) : (
-                <div className="neo-card p-4 text-center text-slate-400 text-xs">
-                  Please sign in to write a review.
-                </div>
-              )}
+              ) : null}
 
               {/* Reviews List */}
               <div className="space-y-3">
-                <h3 className="font-bold text-white font-mono text-xs uppercase tracking-wider">Customer Feedback</h3>
+                <h3 className="font-display font-black text-black text-xs uppercase tracking-wider">Customer Feedback</h3>
                 {reviews.length === 0 ? (
-                  <p className="text-slate-500 text-xs py-4 text-center">Be the first customer to review this item!</p>
+                  <p className="text-black/60 text-xs py-4 text-center">Be the first customer to review this item!</p>
                 ) : (
                   reviews.map((rev, i) => (
-                    <div key={i} className="p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.06] space-y-2">
+                    <div key={i} className="p-4 rounded-2xl bg-[#F9FAFB] border-2 border-black shadow-brutal-sm space-y-2">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-2">
-                          <div className="w-6 h-6 rounded-full bg-white/[0.06] flex items-center justify-center text-slate-300 font-bold text-[10px]">
+                          <div className="w-7 h-7 rounded-xl bg-[#FEF08A] border-2 border-black flex items-center justify-center text-black font-black text-xs shadow-xs">
                             {rev.name?.charAt(0) || 'U'}
                           </div>
                           <div>
-                            <div className="font-semibold text-white text-xs">{rev.name}</div>
-                            <div className="text-[10px] text-slate-500 font-mono">
+                            <div className="font-display font-black text-black text-xs">{rev.name}</div>
+                            <div className="text-[10px] text-black/60 font-mono">
                               {rev.createdAt ? new Date(rev.createdAt).toLocaleDateString() : 'Verified Buyer'}
                             </div>
                           </div>
                         </div>
 
-                        <div className="flex items-center space-x-0.5 text-amber-400">
+                        <div className="flex items-center space-x-0.5 text-black">
                           {[1, 2, 3, 4, 5].map((s) => (
                             <Star
                               key={s}
-                              className={`w-3 h-3 ${s <= rev.rating ? 'fill-current' : 'text-slate-600'}`}
+                              className={`w-3.5 h-3.5 ${s <= rev.rating ? 'fill-current text-black' : 'text-slate-300'}`}
                             />
                           ))}
                         </div>
                       </div>
 
-                      <p className="text-slate-300 leading-relaxed text-xs">{rev.comment}</p>
+                      <p className="text-black font-semibold leading-relaxed text-xs">{rev.comment}</p>
                     </div>
                   ))
                 )}

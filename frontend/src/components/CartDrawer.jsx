@@ -21,8 +21,6 @@ import {
   Lock,
   ArrowLeft,
   Banknote,
-  Building2,
-  Clock,
   Sparkles,
 } from 'lucide-react';
 
@@ -43,7 +41,7 @@ export const CartDrawer = ({ isOpen, onClose, onOrderCompleted }) => {
   });
 
   // Payment State
-  const [paymentMethod, setPaymentMethod] = useState('upi'); // 'upi' | 'card' | 'cod' | 'netbanking'
+  const [paymentMethod, setPaymentMethod] = useState('upi'); // 'upi' | 'card' | 'cod'
   const [upiOption, setUpiOption] = useState('qr'); // 'qr' | 'id'
   const [upiId, setUpiId] = useState('shopper@okhdfcbank');
   const [upiVerified, setUpiVerified] = useState(false);
@@ -123,62 +121,61 @@ export const CartDrawer = ({ isOpen, onClose, onOrderCompleted }) => {
     }
   };
 
-  // Generate UPI payment intent string
   const upiIntentString = `upi://pay?pa=marketpulse@okaxis&pn=MarketPulse&am=${totalAmount.toFixed(2)}&cu=INR&tn=Order_Checkout`;
-  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(upiIntentString)}&color=ffffff&bgcolor=10121a&margin=10`;
+  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(upiIntentString)}&color=000000&bgcolor=FEF08A&margin=10`;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden animate-fade-in">
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-xs transition-opacity" onClick={onClose} />
+    <div className="fixed inset-0 z-50 overflow-hidden animate-pop-in">
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-xs transition-opacity" onClick={onClose} />
 
       <div className="fixed inset-y-0 right-0 max-w-full flex pl-6 sm:pl-10">
-        <div className="w-screen max-w-lg bg-[#090a0f] border-l border-white/[0.08] shadow-2xl flex flex-col justify-between">
+        <div className="w-screen max-w-lg bg-[#FFFFFF] border-l-3 border-black shadow-brutal-xl flex flex-col justify-between">
           
           {/* Header */}
-          <div className="p-5 border-b border-white/[0.08] flex items-center justify-between">
+          <div className="p-5 border-b-3 border-black bg-[#FEF08A] flex items-center justify-between">
             <div className="flex items-center space-x-2.5">
               {step !== 'cart' && step !== 'success' && (
                 <button
                   onClick={() => setStep(step === 'payment' ? 'address' : 'cart')}
-                  className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-white/[0.05] mr-1"
+                  className="p-1.5 rounded-xl bg-white border-2 border-black shadow-brutal-sm hover:translate-x-[-1px] transition mr-1"
                 >
-                  <ArrowLeft className="w-4 h-4" />
+                  <ArrowLeft className="w-4 h-4 text-black" />
                 </button>
               )}
-              <div className="w-8 h-8 rounded-lg bg-white/[0.04] border border-white/[0.08] flex items-center justify-center">
-                <ShoppingBag className="w-4 h-4 text-white" />
+              <div className="w-9 h-9 rounded-xl bg-white border-2 border-black shadow-brutal-sm flex items-center justify-center">
+                <ShoppingBag className="w-4 h-4 text-black" />
               </div>
               <div>
-                <h2 className="text-sm font-bold text-white">
+                <h2 className="text-sm font-display font-black text-black">
                   {step === 'cart' && 'Your Shopping Cart'}
                   {step === 'address' && 'Delivery Address'}
                   {step === 'payment' && 'Select Payment Method'}
-                  {step === 'success' && 'Order Confirmed'}
+                  {step === 'success' && 'Order Confirmed!'}
                 </h2>
-                <p className="text-[10px] text-slate-400 font-mono">
+                <p className="text-[10px] font-mono font-bold text-black/70">
                   {step === 'cart' && `${items.length} items • ${vendorGroups.length} store fulfillments`}
                   {step === 'address' && 'Step 2 of 3 • Shipping details'}
                   {step === 'payment' && 'Step 3 of 3 • Zero-fee UPI & Cards'}
-                  {step === 'success' && 'Fulfillment in progress'}
+                  {step === 'success' && 'Dispatches in progress'}
                 </p>
               </div>
             </div>
             <button
               onClick={onClose}
-              className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/[0.05] transition"
+              className="p-2 rounded-xl bg-white border-2 border-black shadow-brutal-sm hover:bg-[#FF6B97] hover:text-white transition"
             >
               <X className="w-4 h-4" />
             </button>
           </div>
 
           {/* Content Area */}
-          <div className="p-5 flex-1 overflow-y-auto space-y-4">
+          <div className="p-5 flex-1 overflow-y-auto space-y-4 bg-[#F9FAFB]">
             
             {errorMsg && (
-              <div className="p-3.5 rounded-xl neo-card border-rose-500/30 flex items-start space-x-2 text-rose-300 text-xs">
-                <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+              <div className="p-3.5 rounded-xl bg-[#FF6B97]/20 border-2 border-black flex items-start space-x-2 text-black text-xs font-bold shadow-brutal-sm">
+                <AlertTriangle className="w-4 h-4 flex-shrink-0 mt-0.5 text-black" />
                 <div>
-                  <div className="font-bold">Transaction Alert</div>
+                  <div>Transaction Notice</div>
                   <div className="text-[11px] opacity-90">{errorMsg}</div>
                 </div>
               </div>
@@ -187,21 +184,21 @@ export const CartDrawer = ({ isOpen, onClose, onOrderCompleted }) => {
             {/* STEP 1: CART ITEMS */}
             {step === 'cart' && (
               items.length === 0 ? (
-                <div className="text-center py-16 text-slate-500 text-xs space-y-1">
-                  <ShoppingBag className="w-8 h-8 text-slate-600 mx-auto mb-2" />
-                  <p className="font-medium text-slate-400">Your cart is currently empty</p>
-                  <p className="text-[11px] text-slate-600">Discover items from verified vendors in the catalog</p>
+                <div className="text-center py-16 bg-white border-2.5 border-black rounded-2xl p-6 shadow-brutal space-y-2">
+                  <ShoppingBag className="w-8 h-8 text-black mx-auto mb-2" />
+                  <p className="font-display font-black text-black text-sm">Your cart is empty</p>
+                  <p className="text-[11px] font-bold text-black/60">Discover items from verified vendors in the catalog</p>
                 </div>
               ) : (
                 <div className="space-y-4">
                   {vendorGroups.map((group) => (
-                    <div key={group.storeId} className="neo-card p-3.5 space-y-3">
-                      <div className="flex items-center justify-between border-b border-white/[0.06] pb-2 text-xs">
-                        <div className="flex items-center space-x-1.5 font-semibold text-slate-200">
-                          <Store className="w-3.5 h-3.5 text-slate-400" />
+                    <div key={group.storeId} className="bg-white border-2.5 border-black rounded-2xl p-4 shadow-brutal space-y-3">
+                      <div className="flex items-center justify-between border-b-2 border-black pb-2 text-xs">
+                        <div className="flex items-center space-x-1.5 font-display font-black text-black">
+                          <Store className="w-4 h-4 text-black" />
                           <span>{group.storeName}</span>
                         </div>
-                        <span className="font-mono text-slate-400 text-[11px]">
+                        <span className="font-mono font-black text-black text-xs px-2 py-0.5 rounded bg-[#FEF08A] border border-black">
                           ${group.subTotal.toFixed(2)}
                         </span>
                       </div>
@@ -213,33 +210,33 @@ export const CartDrawer = ({ isOpen, onClose, onOrderCompleted }) => {
                               <img
                                 src={item.image}
                                 alt={item.title}
-                                className="w-9 h-9 rounded-lg object-cover bg-white/[0.03]"
+                                className="w-10 h-10 rounded-xl object-cover bg-slate-100 border-2 border-black shadow-brutal-sm"
                               />
                               <div>
-                                <div className="font-semibold text-slate-200 line-clamp-1 max-w-[140px]">{item.title}</div>
-                                <div className="text-slate-400 font-mono text-[10px]">${item.price.toFixed(2)}</div>
+                                <div className="font-display font-bold text-black line-clamp-1 max-w-[140px]">{item.title}</div>
+                                <div className="text-black font-mono font-bold text-[11px]">${item.price.toFixed(2)}</div>
                               </div>
                             </div>
 
                             <div className="flex items-center space-x-2">
-                              <div className="flex items-center bg-white/[0.04] rounded-md border border-white/[0.08]">
+                              <div className="flex items-center bg-[#FEF08A] rounded-xl border-2 border-black shadow-brutal-sm">
                                 <button
                                   onClick={() => updateQuantity(item.productId, item.quantity - 1)}
-                                  className="p-1 text-slate-400 hover:text-white"
+                                  className="p-1.5 text-black hover:bg-[#FDE047] rounded-l-lg"
                                 >
-                                  <Minus className="w-2.5 h-2.5" />
+                                  <Minus className="w-3 h-3" />
                                 </button>
-                                <span className="px-1.5 font-mono font-bold text-white text-xs">{item.quantity}</span>
+                                <span className="px-2 font-mono font-black text-black text-xs">{item.quantity}</span>
                                 <button
                                   onClick={() => updateQuantity(item.productId, item.quantity + 1)}
-                                  className="p-1 text-slate-400 hover:text-white"
+                                  className="p-1.5 text-black hover:bg-[#FDE047] rounded-r-lg"
                                 >
-                                  <Plus className="w-2.5 h-2.5" />
+                                  <Plus className="w-3 h-3" />
                                 </button>
                               </div>
                               <button
                                 onClick={() => removeFromCart(item.productId)}
-                                className="p-1 text-slate-500 hover:text-rose-400"
+                                className="p-1.5 rounded-lg border-2 border-black bg-white hover:bg-[#FF6B97] hover:text-white transition shadow-brutal-sm"
                               >
                                 <Trash2 className="w-3.5 h-3.5" />
                               </button>
@@ -255,66 +252,66 @@ export const CartDrawer = ({ isOpen, onClose, onOrderCompleted }) => {
 
             {/* STEP 2: ADDRESS */}
             {step === 'address' && (
-              <div className="space-y-4 text-xs animate-fade-in">
-                <div className="neo-card p-4 space-y-3">
-                  <div className="flex items-center space-x-2 text-white font-semibold">
-                    <MapPin className="w-4 h-4 text-indigo-400" />
+              <div className="space-y-4 text-xs font-bold animate-pop-in">
+                <div className="bg-white border-2.5 border-black rounded-2xl p-4 shadow-brutal space-y-3">
+                  <div className="flex items-center space-x-2 text-black font-display font-black">
+                    <MapPin className="w-4 h-4 text-black" />
                     <span>Shipping Destination</span>
                   </div>
 
                   <div className="space-y-2.5">
                     <div className="space-y-1">
-                      <label className="text-[10px] font-mono text-slate-400 uppercase">Recipient Name *</label>
+                      <label className="text-[10px] font-mono uppercase text-black">Recipient Name *</label>
                       <input
                         type="text"
                         required
                         value={shippingAddress.name}
                         onChange={(e) => setShippingAddress({ ...shippingAddress, name: e.target.value })}
-                        className="w-full px-3 py-2 rounded-lg bg-white/[0.03] border border-white/[0.08] text-white"
+                        className="w-full px-3 py-2 rounded-xl bg-white border-2 border-black text-black shadow-brutal-sm focus:bg-[#FEFCE8]"
                       />
                     </div>
 
                     <div className="space-y-1">
-                      <label className="text-[10px] font-mono text-slate-400 uppercase">Street Address *</label>
+                      <label className="text-[10px] font-mono uppercase text-black">Street Address *</label>
                       <input
                         type="text"
                         required
                         value={shippingAddress.address}
                         onChange={(e) => setShippingAddress({ ...shippingAddress, address: e.target.value })}
-                        className="w-full px-3 py-2 rounded-lg bg-white/[0.03] border border-white/[0.08] text-white"
+                        className="w-full px-3 py-2 rounded-xl bg-white border-2 border-black text-black shadow-brutal-sm focus:bg-[#FEFCE8]"
                       />
                     </div>
 
                     <div className="grid grid-cols-2 gap-2">
                       <div className="space-y-1">
-                        <label className="text-[10px] font-mono text-slate-400 uppercase">City *</label>
+                        <label className="text-[10px] font-mono uppercase text-black">City *</label>
                         <input
                           type="text"
                           required
                           value={shippingAddress.city}
                           onChange={(e) => setShippingAddress({ ...shippingAddress, city: e.target.value })}
-                          className="w-full px-3 py-2 rounded-lg bg-white/[0.03] border border-white/[0.08] text-white"
+                          className="w-full px-3 py-2 rounded-xl bg-white border-2 border-black text-black shadow-brutal-sm focus:bg-[#FEFCE8]"
                         />
                       </div>
                       <div className="space-y-1">
-                        <label className="text-[10px] font-mono text-slate-400 uppercase">Postal Code *</label>
+                        <label className="text-[10px] font-mono uppercase text-black">Postal Code *</label>
                         <input
                           type="text"
                           required
                           value={shippingAddress.postalCode}
                           onChange={(e) => setShippingAddress({ ...shippingAddress, postalCode: e.target.value })}
-                          className="w-full px-3 py-2 rounded-lg bg-white/[0.03] border border-white/[0.08] text-white font-mono"
+                          className="w-full px-3 py-2 rounded-xl bg-white border-2 border-black text-black font-mono shadow-brutal-sm focus:bg-[#FEFCE8]"
                         />
                       </div>
                     </div>
 
                     <div className="space-y-1">
-                      <label className="text-[10px] font-mono text-slate-400 uppercase">Country</label>
+                      <label className="text-[10px] font-mono uppercase text-black">Country</label>
                       <input
                         type="text"
                         value={shippingAddress.country}
                         onChange={(e) => setShippingAddress({ ...shippingAddress, country: e.target.value })}
-                        className="w-full px-3 py-2 rounded-lg bg-white/[0.03] border border-white/[0.08] text-white"
+                        className="w-full px-3 py-2 rounded-xl bg-white border-2 border-black text-black shadow-brutal-sm focus:bg-[#FEFCE8]"
                       />
                     </div>
                   </div>
@@ -324,73 +321,73 @@ export const CartDrawer = ({ isOpen, onClose, onOrderCompleted }) => {
 
             {/* STEP 3: PAYMENT METHOD (FREE UPI / CARDS / COD) */}
             {step === 'payment' && (
-              <div className="space-y-4 text-xs animate-fade-in">
+              <div className="space-y-4 text-xs font-bold animate-pop-in">
                 {/* Method Selector Tabs */}
                 <div className="grid grid-cols-3 gap-2">
                   <button
                     type="button"
                     onClick={() => setPaymentMethod('upi')}
-                    className={`p-3 rounded-xl border flex flex-col items-center justify-center space-y-1.5 transition ${
+                    className={`p-3 rounded-2xl border-2 border-black flex flex-col items-center justify-center space-y-1 transition ${
                       paymentMethod === 'upi'
-                        ? 'bg-emerald-500/10 border-emerald-500/40 text-emerald-400 font-bold'
-                        : 'bg-white/[0.02] border-white/[0.06] text-slate-400 hover:border-white/[0.12]'
+                        ? 'bg-[#FEF08A] shadow-brutal font-black translate-x-[-1px] translate-y-[-1px]'
+                        : 'bg-white hover:bg-slate-50 shadow-brutal-sm'
                     }`}
                   >
-                    <Smartphone className="w-4 h-4" />
-                    <span className="text-[11px]">Instant UPI</span>
-                    <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-emerald-500/20 text-emerald-300">0% Fee</span>
+                    <Smartphone className="w-4 h-4 text-black" />
+                    <span className="text-[11px] font-display">Instant UPI</span>
+                    <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-black text-white">0% Fee</span>
                   </button>
 
                   <button
                     type="button"
                     onClick={() => setPaymentMethod('card')}
-                    className={`p-3 rounded-xl border flex flex-col items-center justify-center space-y-1.5 transition ${
+                    className={`p-3 rounded-2xl border-2 border-black flex flex-col items-center justify-center space-y-1 transition ${
                       paymentMethod === 'card'
-                        ? 'bg-indigo-500/10 border-indigo-500/40 text-indigo-400 font-bold'
-                        : 'bg-white/[0.02] border-white/[0.06] text-slate-400 hover:border-white/[0.12]'
+                        ? 'bg-[#C4B5FD] shadow-brutal font-black translate-x-[-1px] translate-y-[-1px]'
+                        : 'bg-white hover:bg-slate-50 shadow-brutal-sm'
                     }`}
                   >
-                    <CreditCard className="w-4 h-4" />
-                    <span className="text-[11px]">Cards</span>
-                    <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-white/[0.04] text-slate-400">Visa/MC</span>
+                    <CreditCard className="w-4 h-4 text-black" />
+                    <span className="text-[11px] font-display">Cards</span>
+                    <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-black text-white">Visa/MC</span>
                   </button>
 
                   <button
                     type="button"
                     onClick={() => setPaymentMethod('cod')}
-                    className={`p-3 rounded-xl border flex flex-col items-center justify-center space-y-1.5 transition ${
+                    className={`p-3 rounded-2xl border-2 border-black flex flex-col items-center justify-center space-y-1 transition ${
                       paymentMethod === 'cod'
-                        ? 'bg-amber-500/10 border-amber-500/40 text-amber-400 font-bold'
-                        : 'bg-white/[0.02] border-white/[0.06] text-slate-400 hover:border-white/[0.12]'
+                        ? 'bg-[#FF6B97] text-white shadow-brutal font-black translate-x-[-1px] translate-y-[-1px]'
+                        : 'bg-white hover:bg-slate-50 shadow-brutal-sm text-black'
                     }`}
                   >
                     <Banknote className="w-4 h-4" />
-                    <span className="text-[11px]">COD</span>
-                    <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-white/[0.04] text-slate-400">Pay on delivery</span>
+                    <span className="text-[11px] font-display">COD</span>
+                    <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-black text-white">Delivery</span>
                   </button>
                 </div>
 
                 {/* --- UPI VIEW --- */}
                 {paymentMethod === 'upi' && (
-                  <div className="neo-card p-4 space-y-4">
-                    <div className="flex items-center justify-between border-b border-white/[0.06] pb-2">
+                  <div className="bg-white border-2.5 border-black rounded-2xl p-4 shadow-brutal space-y-4">
+                    <div className="flex items-center justify-between border-b-2 border-black pb-2">
                       <div className="flex items-center space-x-2">
-                        <Smartphone className="w-4 h-4 text-emerald-400" />
-                        <span className="font-semibold text-white">Scan QR or Enter UPI ID</span>
+                        <Smartphone className="w-4 h-4 text-black" />
+                        <span className="font-display font-black text-black">Scan QR or Enter UPI ID</span>
                       </div>
-                      <div className="flex bg-white/[0.04] rounded-lg p-0.5 border border-white/[0.08]">
+                      <div className="flex bg-[#F3F4F6] rounded-xl p-0.5 border-2 border-black">
                         <button
                           onClick={() => setUpiOption('qr')}
-                          className={`px-2 py-0.5 rounded text-[10px] font-mono ${
-                            upiOption === 'qr' ? 'bg-white text-black font-bold' : 'text-slate-400'
+                          className={`px-2 py-0.5 rounded-lg text-[10px] font-mono font-bold ${
+                            upiOption === 'qr' ? 'bg-[#FEF08A] text-black border border-black shadow-xs' : 'text-slate-600'
                           }`}
                         >
                           QR Code
                         </button>
                         <button
                           onClick={() => setUpiOption('id')}
-                          className={`px-2 py-0.5 rounded text-[10px] font-mono ${
-                            upiOption === 'id' ? 'bg-white text-black font-bold' : 'text-slate-400'
+                          className={`px-2 py-0.5 rounded-lg text-[10px] font-mono font-bold ${
+                            upiOption === 'id' ? 'bg-[#FEF08A] text-black border border-black shadow-xs' : 'text-slate-600'
                           }`}
                         >
                           UPI ID
@@ -400,26 +397,26 @@ export const CartDrawer = ({ isOpen, onClose, onOrderCompleted }) => {
 
                     {upiOption === 'qr' ? (
                       <div className="text-center space-y-3 py-2">
-                        <div className="inline-block p-3 rounded-2xl bg-white/[0.03] border border-white/[0.1] shadow-xl">
+                        <div className="inline-block p-3 rounded-2xl bg-[#FEF08A] border-3 border-black shadow-brutal">
                           <img
                             src={qrCodeUrl}
                             alt="Scan UPI QR"
-                            className="w-44 h-44 mx-auto rounded-xl object-contain bg-[#10121a]"
+                            className="w-44 h-44 mx-auto rounded-xl object-contain bg-white border-2 border-black"
                           />
                         </div>
                         <div className="space-y-1">
-                          <div className="text-xs font-mono text-emerald-400 font-bold flex items-center justify-center space-x-1">
+                          <div className="text-xs font-mono font-black text-black flex items-center justify-center space-x-1">
                             <span>Scan with any UPI App</span>
                           </div>
-                          <p className="text-[10px] text-slate-500 font-mono">
-                            Google Pay • PhonePe • Paytm • CRED • Amazon Pay
+                          <p className="text-[10px] text-black/70 font-mono font-bold">
+                            Google Pay • PhonePe • Paytm • CRED • BHIM
                           </p>
                         </div>
                       </div>
                     ) : (
                       <div className="space-y-3 py-2">
                         <div className="space-y-1.5">
-                          <label className="text-[10px] font-mono text-slate-400 uppercase">Virtual Payment Address (VPA)</label>
+                          <label className="text-[10px] font-mono uppercase text-black">Virtual Payment Address (VPA)</label>
                           <div className="flex space-x-2">
                             <input
                               type="text"
@@ -429,15 +426,15 @@ export const CartDrawer = ({ isOpen, onClose, onOrderCompleted }) => {
                                 setUpiVerified(false);
                               }}
                               placeholder="username@okhdfcbank"
-                              className="flex-1 px-3 py-2 rounded-lg bg-white/[0.03] border border-white/[0.08] text-white font-mono text-xs"
+                              className="flex-1 px-3 py-2 rounded-xl bg-white border-2 border-black text-black font-mono text-xs shadow-brutal-sm"
                             />
                             <button
                               type="button"
                               onClick={() => setUpiVerified(true)}
-                              className={`px-3 rounded-lg text-xs font-mono font-semibold transition ${
+                              className={`px-4 rounded-xl text-xs font-mono font-black border-2 border-black transition ${
                                 upiVerified
-                                  ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                                  : 'neo-btn-secondary'
+                                  ? 'bg-[#6EE7B7] text-black shadow-brutal-sm'
+                                  : 'bg-[#FEF08A] hover:bg-[#FDE047] shadow-brutal-sm'
                               }`}
                             >
                               {upiVerified ? 'Verified ✓' : 'Verify'}
@@ -446,8 +443,8 @@ export const CartDrawer = ({ isOpen, onClose, onOrderCompleted }) => {
                         </div>
 
                         {upiVerified && (
-                          <div className="p-2.5 rounded-lg bg-emerald-950/20 border border-emerald-500/30 text-emerald-300 text-[11px] flex items-center space-x-1.5">
-                            <CheckCircle2 className="w-3.5 h-3.5 flex-shrink-0" />
+                          <div className="p-2.5 rounded-xl bg-[#6EE7B7] border-2 border-black text-black text-[11px] font-bold flex items-center space-x-1.5 shadow-brutal-sm">
+                            <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
                             <span>VPA Verified: Account holder matched</span>
                           </div>
                         )}
@@ -458,42 +455,42 @@ export const CartDrawer = ({ isOpen, onClose, onOrderCompleted }) => {
 
                 {/* --- CARD VIEW --- */}
                 {paymentMethod === 'card' && (
-                  <div className="neo-card p-4 space-y-3.5">
-                    <div className="flex items-center justify-between border-b border-white/[0.06] pb-2">
-                      <span className="font-semibold text-white">Card Details</span>
-                      <div className="flex items-center space-x-1 text-[10px] text-slate-400">
-                        <Lock className="w-3 h-3 text-emerald-400" />
+                  <div className="bg-white border-2.5 border-black rounded-2xl p-4 shadow-brutal space-y-3.5">
+                    <div className="flex items-center justify-between border-b-2 border-black pb-2">
+                      <span className="font-display font-black text-black">Card Details</span>
+                      <div className="flex items-center space-x-1 text-[10px] text-black font-mono font-bold bg-[#FEF08A] px-2 py-0.5 rounded border border-black">
+                        <Lock className="w-3 h-3 text-black" />
                         <span>256-bit Encrypted</span>
                       </div>
                     </div>
 
                     <div className="space-y-2.5">
                       <div className="space-y-1">
-                        <label className="text-[10px] font-mono text-slate-400 uppercase">Card Number</label>
+                        <label className="text-[10px] font-mono uppercase text-black">Card Number</label>
                         <input
                           type="text"
                           required
                           value={cardData.number}
                           onChange={handleCardNumberChange}
                           placeholder="4242 4242 4242 4242"
-                          className="w-full px-3 py-2 rounded-lg bg-white/[0.03] border border-white/[0.08] text-white font-mono text-xs tracking-wider"
+                          className="w-full px-3 py-2 rounded-xl bg-white border-2 border-black text-black font-mono text-xs tracking-wider shadow-brutal-sm"
                         />
                       </div>
 
                       <div className="grid grid-cols-2 gap-2">
                         <div className="space-y-1">
-                          <label className="text-[10px] font-mono text-slate-400 uppercase">Expiry Date</label>
+                          <label className="text-[10px] font-mono uppercase text-black">Expiry Date</label>
                           <input
                             type="text"
                             required
                             value={cardData.expiry}
                             onChange={handleExpiryChange}
                             placeholder="MM/YY"
-                            className="w-full px-3 py-2 rounded-lg bg-white/[0.03] border border-white/[0.08] text-white font-mono text-xs"
+                            className="w-full px-3 py-2 rounded-xl bg-white border-2 border-black text-black font-mono text-xs shadow-brutal-sm"
                           />
                         </div>
                         <div className="space-y-1">
-                          <label className="text-[10px] font-mono text-slate-400 uppercase">Security Code (CVV)</label>
+                          <label className="text-[10px] font-mono uppercase text-black">Security Code (CVV)</label>
                           <input
                             type="password"
                             required
@@ -501,20 +498,20 @@ export const CartDrawer = ({ isOpen, onClose, onOrderCompleted }) => {
                             value={cardData.cvv}
                             onChange={(e) => setCardData({ ...cardData, cvv: e.target.value })}
                             placeholder="•••"
-                            className="w-full px-3 py-2 rounded-lg bg-white/[0.03] border border-white/[0.08] text-white font-mono text-xs"
+                            className="w-full px-3 py-2 rounded-xl bg-white border-2 border-black text-black font-mono text-xs shadow-brutal-sm"
                           />
                         </div>
                       </div>
 
                       <div className="space-y-1">
-                        <label className="text-[10px] font-mono text-slate-400 uppercase">Cardholder Name</label>
+                        <label className="text-[10px] font-mono uppercase text-black">Cardholder Name</label>
                         <input
                           type="text"
                           required
                           value={cardData.name}
                           onChange={(e) => setCardData({ ...cardData, name: e.target.value })}
                           placeholder="Full name on card"
-                          className="w-full px-3 py-2 rounded-lg bg-white/[0.03] border border-white/[0.08] text-white text-xs"
+                          className="w-full px-3 py-2 rounded-xl bg-white border-2 border-black text-black text-xs shadow-brutal-sm"
                         />
                       </div>
                     </div>
@@ -523,13 +520,13 @@ export const CartDrawer = ({ isOpen, onClose, onOrderCompleted }) => {
 
                 {/* --- COD VIEW --- */}
                 {paymentMethod === 'cod' && (
-                  <div className="neo-card p-4 space-y-2">
-                    <div className="flex items-center space-x-2 text-white font-semibold">
-                      <Banknote className="w-4 h-4 text-amber-400" />
+                  <div className="bg-[#FEF08A] border-2.5 border-black rounded-2xl p-4 shadow-brutal space-y-2 text-black">
+                    <div className="flex items-center space-x-2 font-display font-black">
+                      <Banknote className="w-5 h-5 text-black" />
                       <span>Cash on Delivery (COD)</span>
                     </div>
-                    <p className="text-[11px] text-slate-400 leading-relaxed">
-                      Pay in cash or through UPI upon delivery. Our couriers will carry digital payment QR scanners upon delivery.
+                    <p className="text-[11px] font-bold leading-relaxed opacity-80">
+                      Pay in cash or through UPI upon delivery. Couriers will carry digital payment QR scanners upon delivery.
                     </p>
                   </div>
                 )}
@@ -538,31 +535,31 @@ export const CartDrawer = ({ isOpen, onClose, onOrderCompleted }) => {
 
             {/* STEP 4: ORDER SUCCESS */}
             {step === 'success' && checkoutResult && (
-              <div className="space-y-4 animate-fade-in text-xs">
-                <div className="p-5 rounded-2xl neo-card border-emerald-500/30 text-center space-y-3">
-                  <div className="w-12 h-12 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mx-auto text-emerald-400">
-                    <CheckCircle2 className="w-6 h-6" />
+              <div className="space-y-4 animate-pop-in text-xs font-bold">
+                <div className="p-6 rounded-3xl bg-[#6EE7B7] border-3 border-black shadow-brutal-xl text-center space-y-4 text-black">
+                  <div className="w-14 h-14 rounded-2xl bg-white border-2.5 border-black shadow-brutal flex items-center justify-center mx-auto text-black">
+                    <CheckCircle2 className="w-8 h-8 text-black" />
                   </div>
 
                   <div>
-                    <h3 className="text-base font-bold text-white">Payment & Order Confirmed!</h3>
-                    <p className="text-[11px] text-slate-400 mt-0.5">
-                      Transaction verified via <span className="text-white font-mono font-bold uppercase">{checkoutResult.paymentMethodUsed}</span>
+                    <h3 className="text-lg font-display font-black text-black">Order & Payment Confirmed!</h3>
+                    <p className="text-[11px] font-mono font-bold text-black/80 mt-0.5">
+                      Verified via <span className="bg-black text-white px-2 py-0.5 rounded uppercase">{checkoutResult.paymentMethodUsed}</span>
                     </p>
                   </div>
 
-                  <div className="p-3 rounded-xl bg-white/[0.02] border border-white/[0.06] text-left space-y-1.5 font-mono text-[11px]">
+                  <div className="p-4 rounded-2xl bg-white border-2.5 border-black shadow-brutal-sm text-left space-y-2 font-mono text-xs">
                     <div className="flex justify-between">
-                      <span className="text-slate-400">Order Number:</span>
-                      <span className="text-white font-bold">#{checkoutResult.order?.orderNumber}</span>
+                      <span className="text-black/70">Order Number:</span>
+                      <span className="text-black font-black">#{checkoutResult.order?.orderNumber}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-slate-400">Total Paid:</span>
-                      <span className="text-emerald-400 font-bold">${checkoutResult.order?.totalAmount?.toFixed(2)}</span>
+                      <span className="text-black/70">Total Paid:</span>
+                      <span className="text-black font-black">${checkoutResult.order?.totalAmount?.toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-slate-400">Vendor Sub-Orders:</span>
-                      <span className="text-slate-200">{checkoutResult.order?.vendorSubOrders?.length} Dispatches</span>
+                      <span className="text-black/70">Vendor Sub-Orders:</span>
+                      <span className="text-black font-black">{checkoutResult.order?.vendorSubOrders?.length} Dispatches</span>
                     </div>
                   </div>
 
@@ -572,7 +569,7 @@ export const CartDrawer = ({ isOpen, onClose, onOrderCompleted }) => {
                       setCheckoutResult(null);
                       onClose();
                     }}
-                    className="w-full neo-btn-primary py-2.5 text-xs"
+                    className="w-full py-3 rounded-2xl bg-[#FEF08A] hover:bg-[#FDE047] text-black font-display font-black text-xs border-2.5 border-black shadow-brutal"
                   >
                     Return to Storefront
                   </button>
@@ -584,29 +581,29 @@ export const CartDrawer = ({ isOpen, onClose, onOrderCompleted }) => {
 
           {/* Footer Controls */}
           {items.length > 0 && step !== 'success' && (
-            <div className="p-5 border-t border-white/[0.08] bg-[#090a0f] space-y-3.5">
-              <div className="space-y-1 text-xs text-slate-400 font-mono">
+            <div className="p-5 border-t-3 border-black bg-white space-y-3.5">
+              <div className="space-y-1.5 text-xs font-mono font-bold text-black">
                 <div className="flex justify-between">
                   <span>Cart Items ({items.length})</span>
-                  <span className="text-white">${totalAmount.toFixed(2)}</span>
+                  <span className="font-black">${totalAmount.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between text-slate-500 text-[11px]">
-                  <span>Shipping & Platform Processing</span>
-                  <span className="text-emerald-400 font-semibold">Free (0% Convenience Fee)</span>
+                <div className="flex justify-between text-[11px] text-black/70">
+                  <span>Shipping & Processing</span>
+                  <span className="bg-[#6EE7B7] text-black px-1.5 rounded border border-black font-black">FREE 0% FEE</span>
                 </div>
-                <div className="flex justify-between text-sm font-bold text-white pt-2 border-t border-white/[0.06]">
-                  <span>Total Amount</span>
-                  <span>${totalAmount.toFixed(2)}</span>
+                <div className="flex justify-between text-base font-black text-black pt-2 border-t-2 border-black">
+                  <span>Total Due</span>
+                  <span className="bg-[#FEF08A] px-2 py-0.5 rounded border border-black">${totalAmount.toFixed(2)}</span>
                 </div>
               </div>
 
               {step === 'cart' && (
                 <button
                   onClick={() => setStep('address')}
-                  className="w-full neo-btn-primary text-xs py-2.5 flex items-center justify-center space-x-1.5"
+                  className="w-full py-3 rounded-xl bg-[#FEF08A] hover:bg-[#FDE047] text-black font-display font-black text-xs border-2.5 border-black shadow-brutal flex items-center justify-center space-x-1.5 transition"
                 >
                   <span>Proceed to Shipping Address</span>
-                  <ArrowRight className="w-3.5 h-3.5 ml-1" />
+                  <ArrowRight className="w-4 h-4 ml-1" />
                 </button>
               )}
 
@@ -620,10 +617,10 @@ export const CartDrawer = ({ isOpen, onClose, onOrderCompleted }) => {
                     setErrorMsg(null);
                     setStep('payment');
                   }}
-                  className="w-full neo-btn-primary text-xs py-2.5 flex items-center justify-center space-x-1.5"
+                  className="w-full py-3 rounded-xl bg-[#6EE7B7] hover:bg-[#34D399] text-black font-display font-black text-xs border-2.5 border-black shadow-brutal flex items-center justify-center space-x-1.5 transition"
                 >
                   <span>Select Payment Method</span>
-                  <ArrowRight className="w-3.5 h-3.5 ml-1" />
+                  <ArrowRight className="w-4 h-4 ml-1" />
                 </button>
               )}
 
@@ -631,7 +628,7 @@ export const CartDrawer = ({ isOpen, onClose, onOrderCompleted }) => {
                 <button
                   disabled={checkingOut}
                   onClick={handleExecutePayment}
-                  className="w-full neo-btn-primary text-xs py-2.5 flex items-center justify-center space-x-1.5 disabled:opacity-50"
+                  className="w-full py-3 rounded-xl bg-[#FEF08A] hover:bg-[#FDE047] text-black font-display font-black text-xs border-2.5 border-black shadow-brutal flex items-center justify-center space-x-1.5 transition disabled:opacity-50"
                 >
                   {checkingOut ? (
                     <span>Securing Transaction...</span>

@@ -14,15 +14,16 @@ import { CartDrawer } from './components/CartDrawer';
 import { ProductDetailModal } from './components/ProductDetailModal';
 import { ApiDocsModal } from './components/ApiDocsModal';
 import { OrdersHistoryView } from './components/OrdersHistoryView';
-import { Layers } from 'lucide-react';
+import { Sparkles, Layers } from 'lucide-react';
 
 const LoadingScreen = () => (
-  <div className="min-h-screen bg-[#090a0f] flex items-center justify-center">
-    <div className="text-center space-y-3 animate-fade-in">
-      <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-white/[0.06] border border-white/[0.1]">
-        <Layers className="w-6 h-6 text-white animate-pulse" />
+  <div className="min-h-screen bg-[#5B85FA] brutal-grid-bg flex items-center justify-center p-4">
+    <div className="neo-card p-8 text-center space-y-4 shadow-brutal-xl animate-pop-in">
+      <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-[#FEF08A] border-3 border-black shadow-brutal">
+        <Sparkles className="w-7 h-7 text-black animate-spin" />
       </div>
-      <p className="text-xs font-mono text-slate-500">Loading MarketPulse...</p>
+      <h2 className="text-lg font-display font-black text-black">Loading MarketPulse...</h2>
+      <p className="text-xs font-mono font-bold text-black/70">Neo-Brutalist Engine</p>
     </div>
   </div>
 );
@@ -35,12 +36,10 @@ const MainApp = () => {
   const [isApiDocsOpen, setIsApiDocsOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
-  // Show loading spinner while checking auth
   if (loading) {
     return <LoadingScreen />;
   }
 
-  // Not logged in — show login / register page
   if (!user) {
     return <AuthPage />;
   }
@@ -50,10 +49,9 @@ const MainApp = () => {
     setCurrentTab('store-detail');
   };
 
-  // Authenticated — show the full app
   return (
-    <div className="min-h-screen flex flex-col bg-[#090a0f] text-slate-100 selection:bg-indigo-500 selection:text-white">
-      {/* Top Navigation */}
+    <div className="min-h-screen bg-[#5B85FA] brutal-grid-bg text-black selection:bg-[#FEF08A] selection:text-black flex flex-col justify-between">
+      {/* Top Navbar */}
       <Navbar
         currentTab={currentTab}
         setCurrentTab={setCurrentTab}
@@ -62,7 +60,7 @@ const MainApp = () => {
       />
 
       {/* Main Content Area */}
-      <main className="flex-1">
+      <main className="flex-1 pb-12">
         {currentTab === 'store' && (
           <StorefrontView
             onSelectProduct={(product) => setSelectedProduct(product)}
@@ -102,27 +100,27 @@ const MainApp = () => {
         onOpenStore={handleOpenStore}
       />
 
-      {/* API Specs & Postman Modal */}
+      {/* API Specs Modal */}
       <ApiDocsModal
         isOpen={isApiDocsOpen}
         onClose={() => setIsApiDocsOpen(false)}
       />
 
       {/* Footer */}
-      <footer className="mt-16 border-t border-white/[0.06] bg-[#090a0f] py-6 px-4 sm:px-6 lg:px-8 text-xs text-slate-500">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
+      <footer className="border-t-3 border-black bg-[#FEF08A] py-6 px-4 sm:px-6 lg:px-8 text-xs text-black font-mono font-bold shadow-[0px_-4px_0px_0px_#000]">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center space-x-2">
-            <span className="font-bold text-slate-300">MarketPulse</span>
-            <span>•</span>
-            <span>© {new Date().getFullYear()} Multi-Vendor Marketplace Engine</span>
+            <span className="font-display font-black text-sm uppercase bg-black text-white px-2 py-0.5 rounded-md">MarketPulse</span>
+            <span>★</span>
+            <span>Neo-Brutalist Multi-Vendor Architecture</span>
           </div>
 
-          <div className="flex items-center space-x-4 text-[10px]">
-            <span className="hover:text-slate-300 cursor-pointer transition">Privacy Policy</span>
+          <div className="flex items-center space-x-4 text-xs font-black">
+            <span className="hover:underline cursor-pointer">Privacy</span>
             <span>•</span>
-            <span className="hover:text-slate-300 cursor-pointer transition">Terms of Service</span>
+            <span className="hover:underline cursor-pointer">Terms</span>
             <span>•</span>
-            <span className="hover:text-slate-300 cursor-pointer transition">Merchant Standards</span>
+            <span className="hover:underline cursor-pointer">Vendors</span>
           </div>
         </div>
       </footer>

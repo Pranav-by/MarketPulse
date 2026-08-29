@@ -14,6 +14,7 @@ import {
   Database,
   Zap,
   PackageCheck,
+  Sparkles,
 } from 'lucide-react';
 
 export const AuthPage = () => {
@@ -83,296 +84,241 @@ export const AuthPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#090a0f] flex flex-col">
-      {/* Background grid */}
-      <div className="fixed inset-0 opacity-[0.02]" style={{
-        backgroundImage: `linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px)`,
-        backgroundSize: '60px 60px',
-      }} />
-
-      <div className="relative z-10 flex-1 flex flex-col items-center justify-center px-4 py-12">
-        {/* Brand */}
-        <div className="text-center mb-8 animate-fade-in">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-white/[0.06] border border-white/[0.1] mb-4">
-            <Layers className="w-7 h-7 text-white" />
-          </div>
-          <h1 className="text-2xl font-extrabold text-white tracking-tight">MarketPulse</h1>
-          <p className="text-sm text-slate-400 mt-1">Multi-Vendor Marketplace Platform</p>
+    <div className="min-h-screen bg-[#5B85FA] brutal-grid-bg flex flex-col justify-center items-center px-4 py-12">
+      {/* Brand Sticker */}
+      <div className="text-center mb-8 animate-pop-in">
+        <div className="inline-flex items-center justify-center p-4 rounded-2xl bg-[#FEF08A] border-3 border-black shadow-brutal-lg mb-3 rotate-[-2deg]">
+          <Layers className="w-8 h-8 text-black" />
+          <span className="font-display font-black text-2xl text-black ml-2 tracking-tight">MarketPulse</span>
         </div>
+        <p className="text-xs font-mono font-bold bg-white text-black px-3 py-1 rounded-full border-2 border-black shadow-brutal-sm inline-block">
+          ⚡ Multi-Vendor Marketplace Platform
+        </p>
+      </div>
 
-        <div className="w-full max-w-md animate-fade-in">
-          <div className="neo-card p-6 sm:p-8 space-y-5">
-            {/* Tabs */}
-            <div className="flex items-center border-b border-white/[0.06] pb-3 gap-1">
-              <button
-                onClick={() => { setMode('login'); setError(null); }}
-                className={`px-4 py-1.5 rounded-lg text-sm font-semibold transition ${
-                  mode === 'login'
-                    ? 'bg-white text-[#090a0f]'
-                    : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
-                }`}
-              >
-                Sign In
-              </button>
-              <button
-                onClick={() => { setMode('register'); setError(null); }}
-                className={`px-4 py-1.5 rounded-lg text-sm font-semibold transition ${
-                  mode === 'register'
-                    ? 'bg-white text-[#090a0f]'
-                    : 'text-slate-400 hover:text-white hover:bg-white/[0.04]'
-                }`}
-              >
-                Create Account
-              </button>
+      <div className="w-full max-w-md animate-pop-in">
+        <div className="bg-white border-3 border-black rounded-2xl shadow-brutal-xl p-6 sm:p-8 space-y-5">
+          {/* Tabs */}
+          <div className="grid grid-cols-2 gap-2 bg-[#F3F4F6] p-1.5 rounded-xl border-2 border-black">
+            <button
+              onClick={() => { setMode('login'); setError(null); }}
+              className={`py-2 rounded-lg text-xs font-display font-black transition border-2 border-black ${
+                mode === 'login'
+                  ? 'bg-[#FEF08A] shadow-brutal-sm'
+                  : 'bg-transparent border-transparent text-slate-600 hover:text-black'
+              }`}
+            >
+              Sign In
+            </button>
+            <button
+              onClick={() => { setMode('register'); setError(null); }}
+              className={`py-2 rounded-lg text-xs font-display font-black transition border-2 border-black ${
+                mode === 'register'
+                  ? 'bg-[#FEF08A] shadow-brutal-sm'
+                  : 'bg-transparent border-transparent text-slate-600 hover:text-black'
+              }`}
+            >
+              Create Account
+            </button>
+          </div>
+
+          {error && (
+            <div className="p-3.5 rounded-xl bg-[#FF6B97]/20 border-2 border-black flex items-center gap-2.5 text-xs font-bold text-black shadow-brutal-sm">
+              <AlertCircle className="w-4 h-4 text-black flex-shrink-0" />
+              <span>{error}</span>
             </div>
+          )}
 
-            {error && (
-              <div className="p-3 rounded-xl bg-rose-500/[0.06] border border-rose-500/20 flex items-center gap-2.5 text-xs text-rose-300">
-                <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                <span>{error}</span>
+          {/* ─── Login Form ─── */}
+          {mode === 'login' && (
+            <form onSubmit={handleLogin} className="space-y-4 text-xs font-bold">
+              <div className="space-y-1.5">
+                <label className="text-[11px] uppercase font-mono tracking-wider text-black">Email Address</label>
+                <div className="relative">
+                  <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-black" />
+                  <input
+                    type="email"
+                    required
+                    autoComplete="email"
+                    value={loginEmail}
+                    onChange={(e) => setLoginEmail(e.target.value)}
+                    placeholder="you@example.com"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white border-2 border-black text-black placeholder-slate-400 font-semibold shadow-brutal-sm focus:bg-[#FEFCE8] focus:outline-none"
+                  />
+                </div>
               </div>
-            )}
 
-            {/* ─── Login ─── */}
-            {mode === 'login' && (
-              <form onSubmit={handleLogin} className="space-y-4">
-                <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-300">Email Address</label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-                    <input
-                      type="email"
-                      required
-                      autoComplete="email"
-                      value={loginEmail}
-                      onChange={(e) => setLoginEmail(e.target.value)}
-                      placeholder="you@example.com"
-                      className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/[0.08] text-sm text-white placeholder-slate-500 focus:border-white/[0.2] focus:bg-white/[0.05] transition"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-300">Password</label>
-                  <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-                    <input
-                      type={showPassword ? 'text' : 'password'}
-                      required
-                      autoComplete="current-password"
-                      value={loginPassword}
-                      onChange={(e) => setLoginPassword(e.target.value)}
-                      placeholder="••••••••"
-                      className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-white/[0.03] border border-white/[0.08] text-sm text-white placeholder-slate-500 focus:border-white/[0.2] focus:bg-white/[0.05] transition"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
-                    >
-                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                    </button>
-                  </div>
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="w-full neo-btn-primary text-sm flex items-center justify-center gap-2 py-2.5 disabled:opacity-50"
-                >
-                  {submitting ? 'Signing in...' : (
-                    <>
-                      <span>Sign In</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  )}
-                </button>
-
-                <p className="text-center text-xs text-slate-500">
-                  Don't have an account?{' '}
-                  <button type="button" onClick={() => { setMode('register'); setError(null); }} className="text-white font-semibold hover:underline">
-                    Create one
+              <div className="space-y-1.5">
+                <label className="text-[11px] uppercase font-mono tracking-wider text-black">Password</label>
+                <div className="relative">
+                  <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-black" />
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    required
+                    autoComplete="current-password"
+                    value={loginPassword}
+                    onChange={(e) => setLoginPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-white border-2 border-black text-black placeholder-slate-400 font-semibold shadow-brutal-sm focus:bg-[#FEFCE8] focus:outline-none font-mono"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-black hover:opacity-70"
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
-                </p>
-              </form>
-            )}
-
-            {/* ─── Register ─── */}
-            {mode === 'register' && (
-              <form onSubmit={handleRegister} className="space-y-4">
-                <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-300">Full Name</label>
-                  <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-                    <input
-                      type="text"
-                      required
-                      autoComplete="name"
-                      value={regName}
-                      onChange={(e) => setRegName(e.target.value)}
-                      placeholder="John Doe"
-                      className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/[0.08] text-sm text-white placeholder-slate-500 focus:border-white/[0.2] focus:bg-white/[0.05] transition"
-                    />
-                  </div>
                 </div>
+              </div>
 
-                <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-300">Email Address</label>
-                  <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-                    <input
-                      type="email"
-                      required
-                      autoComplete="email"
-                      value={regEmail}
-                      onChange={(e) => setRegEmail(e.target.value)}
-                      placeholder="you@example.com"
-                      className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/[0.08] text-sm text-white placeholder-slate-500 focus:border-white/[0.2] focus:bg-white/[0.05] transition"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-slate-300">Password</label>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-                      <input
-                        type={showPassword ? 'text' : 'password'}
-                        required
-                        minLength={6}
-                        autoComplete="new-password"
-                        value={regPassword}
-                        onChange={(e) => setRegPassword(e.target.value)}
-                        placeholder="Min 6 chars"
-                        className="w-full pl-10 pr-3 py-2.5 rounded-xl bg-white/[0.03] border border-white/[0.08] text-sm text-white placeholder-slate-500 focus:border-white/[0.2] focus:bg-white/[0.05] transition"
-                      />
-                    </div>
-                  </div>
-                  <div className="space-y-1.5">
-                    <label className="text-xs font-semibold text-slate-300">Confirm</label>
-                    <div className="relative">
-                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-                      <input
-                        type={showPassword ? 'text' : 'password'}
-                        required
-                        minLength={6}
-                        autoComplete="new-password"
-                        value={regConfirmPassword}
-                        onChange={(e) => setRegConfirmPassword(e.target.value)}
-                        placeholder="Repeat"
-                        className="w-full pl-10 pr-3 py-2.5 rounded-xl bg-white/[0.03] border border-white/[0.08] text-sm text-white placeholder-slate-500 focus:border-white/[0.2] focus:bg-white/[0.05] transition"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <label className="flex items-center gap-2 text-xs text-slate-400 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={showPassword}
-                      onChange={(e) => setShowPassword(e.target.checked)}
-                      className="rounded bg-white/[0.05] border-white/[0.12] text-indigo-500 focus:ring-0 w-3.5 h-3.5"
-                    />
-                    <span>Show passwords</span>
-                  </label>
-                </div>
-
-                {/* Role Selector */}
-                <div className="space-y-1.5">
-                  <label className="text-xs font-semibold text-slate-300">Account Type</label>
-                  <div className="grid grid-cols-2 gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setRegRole('customer')}
-                      className={`p-3 rounded-xl border text-left transition ${
-                        regRole === 'customer'
-                          ? 'bg-indigo-500/10 border-indigo-500/30 text-white'
-                          : 'bg-white/[0.02] border-white/[0.06] text-slate-400 hover:border-white/[0.12]'
-                      }`}
-                    >
-                      <div className="flex items-center gap-1.5 text-xs font-semibold">
-                        <PackageCheck className="w-3.5 h-3.5" />
-                        <span>Customer</span>
-                      </div>
-                      <div className="text-[10px] opacity-70 mt-0.5">Browse & purchase products</div>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setRegRole('vendor')}
-                      className={`p-3 rounded-xl border text-left transition ${
-                        regRole === 'vendor'
-                          ? 'bg-emerald-500/10 border-emerald-500/30 text-white'
-                          : 'bg-white/[0.02] border-white/[0.06] text-slate-400 hover:border-white/[0.12]'
-                      }`}
-                    >
-                      <div className="flex items-center gap-1.5 text-xs font-semibold">
-                        <Store className="w-3.5 h-3.5" />
-                        <span>Vendor</span>
-                      </div>
-                      <div className="text-[10px] opacity-70 mt-0.5">Open your own store & sell</div>
-                    </button>
-                  </div>
-                </div>
-
-                {regRole === 'vendor' && (
-                  <div className="space-y-1.5 animate-fade-in">
-                    <label className="text-xs font-semibold text-slate-300">Store Name</label>
-                    <div className="relative">
-                      <Store className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-                      <input
-                        type="text"
-                        required
-                        value={regStoreName}
-                        onChange={(e) => setRegStoreName(e.target.value)}
-                        placeholder="My Awesome Store"
-                        className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/[0.08] text-sm text-white placeholder-slate-500 focus:border-white/[0.2] focus:bg-white/[0.05] transition"
-                      />
-                    </div>
-                  </div>
+              <button
+                type="submit"
+                disabled={submitting}
+                className="w-full py-3 rounded-xl bg-[#FEF08A] hover:bg-[#FDE047] text-black font-display font-black text-sm border-2.5 border-black shadow-brutal flex items-center justify-center space-x-2 transition hover:translate-x-[-1px] hover:translate-y-[-1px] active:translate-x-[2px] active:translate-y-[2px] disabled:opacity-50"
+              >
+                {submitting ? 'Authenticating...' : (
+                  <>
+                    <span>Sign In</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
                 )}
+              </button>
 
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="w-full neo-btn-primary text-sm flex items-center justify-center gap-2 py-2.5 disabled:opacity-50"
-                >
-                  {submitting ? 'Creating Account...' : (
-                    <>
-                      <span>Create Account</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  )}
-                </button>
-
-                <p className="text-center text-xs text-slate-500">
-                  Already have an account?{' '}
-                  <button type="button" onClick={() => { setMode('login'); setError(null); }} className="text-white font-semibold hover:underline">
-                    Sign in
-                  </button>
-                </p>
-              </form>
-            )}
-          </div>
-
-          {/* Feature chips */}
-          <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
-            {[
-              { icon: Shield, label: 'JWT Authentication' },
-              { icon: Database, label: 'MongoDB Atlas' },
-              { icon: Zap, label: 'Real-time Inventory' },
-            ].map((f, i) => (
-              <div key={i} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/[0.02] border border-white/[0.05] text-[10px] text-slate-500 font-mono">
-                <f.icon className="w-3 h-3" />
-                <span>{f.label}</span>
+              <div className="p-3 bg-[#EBF3FE] border-2 border-black rounded-xl text-[11px] font-mono text-black space-y-1">
+                <div className="font-bold flex items-center space-x-1">
+                  <Sparkles className="w-3.5 h-3.5 text-black" />
+                  <span>Seeded Accounts Available:</span>
+                </div>
+                <div className="text-[10px]">
+                  Customer: <span className="font-bold">customer@marketpulse.io</span> (Pass: <span className="font-bold">Password123!</span>)
+                </div>
+                <div className="text-[10px]">
+                  Admin: <span className="font-bold">admin@marketpulse.io</span> (Pass: <span className="font-bold">Password123!</span>)
+                </div>
               </div>
-            ))}
-          </div>
-        </div>
+            </form>
+          )}
 
-        <div className="mt-8 text-center text-[10px] font-mono text-slate-600">
-          © {new Date().getFullYear()} MarketPulse. All rights reserved.
+          {/* ─── Register Form ─── */}
+          {mode === 'register' && (
+            <form onSubmit={handleRegister} className="space-y-3.5 text-xs font-bold">
+              <div className="space-y-1">
+                <label className="text-[10px] uppercase font-mono tracking-wider text-black">Full Name *</label>
+                <input
+                  type="text"
+                  required
+                  value={regName}
+                  onChange={(e) => setRegName(e.target.value)}
+                  placeholder="Jane Doe"
+                  className="w-full px-3.5 py-2 rounded-xl bg-white border-2 border-black text-black font-semibold shadow-brutal-sm focus:bg-[#FEFCE8]"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[10px] uppercase font-mono tracking-wider text-black">Email Address *</label>
+                <input
+                  type="email"
+                  required
+                  value={regEmail}
+                  onChange={(e) => setRegEmail(e.target.value)}
+                  placeholder="jane@example.com"
+                  className="w-full px-3.5 py-2 rounded-xl bg-white border-2 border-black text-black font-semibold shadow-brutal-sm focus:bg-[#FEFCE8]"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <div className="space-y-1">
+                  <label className="text-[10px] uppercase font-mono tracking-wider text-black">Password *</label>
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    required
+                    minLength={6}
+                    value={regPassword}
+                    onChange={(e) => setRegPassword(e.target.value)}
+                    placeholder="Min 6 chars"
+                    className="w-full px-3 py-2 rounded-xl bg-white border-2 border-black text-black font-mono shadow-brutal-sm"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-[10px] uppercase font-mono tracking-wider text-black">Confirm *</label>
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    required
+                    minLength={6}
+                    value={regConfirmPassword}
+                    onChange={(e) => setRegConfirmPassword(e.target.value)}
+                    placeholder="Repeat"
+                    className="w-full px-3 py-2 rounded-xl bg-white border-2 border-black text-black font-mono shadow-brutal-sm"
+                  />
+                </div>
+              </div>
+
+              {/* Role Picker */}
+              <div className="space-y-1.5 pt-1">
+                <label className="text-[10px] uppercase font-mono tracking-wider text-black">Account Role</label>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setRegRole('customer')}
+                    className={`p-2.5 rounded-xl border-2 border-black text-left transition ${
+                      regRole === 'customer'
+                        ? 'bg-[#C4B5FD] shadow-brutal-sm font-black'
+                        : 'bg-white hover:bg-slate-50'
+                    }`}
+                  >
+                    <div className="flex items-center gap-1 text-xs">
+                      <PackageCheck className="w-3.5 h-3.5" />
+                      <span>Customer</span>
+                    </div>
+                    <div className="text-[9px] opacity-80 mt-0.5">Shop & track orders</div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setRegRole('vendor')}
+                    className={`p-2.5 rounded-xl border-2 border-black text-left transition ${
+                      regRole === 'vendor'
+                        ? 'bg-[#6EE7B7] shadow-brutal-sm font-black'
+                        : 'bg-white hover:bg-slate-50'
+                    }`}
+                  >
+                    <div className="flex items-center gap-1 text-xs">
+                      <Store className="w-3.5 h-3.5" />
+                      <span>Vendor</span>
+                    </div>
+                    <div className="text-[9px] opacity-80 mt-0.5">Sell products</div>
+                  </button>
+                </div>
+              </div>
+
+              {regRole === 'vendor' && (
+                <div className="space-y-1 animate-pop-in">
+                  <label className="text-[10px] uppercase font-mono tracking-wider text-black">Store Name *</label>
+                  <input
+                    type="text"
+                    required
+                    value={regStoreName}
+                    onChange={(e) => setRegStoreName(e.target.value)}
+                    placeholder="Apex Robotics"
+                    className="w-full px-3.5 py-2 rounded-xl bg-white border-2 border-black text-black font-semibold shadow-brutal-sm focus:bg-[#FEFCE8]"
+                  />
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={submitting}
+                className="w-full py-3 rounded-xl bg-[#6EE7B7] hover:bg-[#34D399] text-black font-display font-black text-sm border-2.5 border-black shadow-brutal flex items-center justify-center space-x-2 transition disabled:opacity-50 mt-2"
+              >
+                {submitting ? 'Registering...' : (
+                  <>
+                    <span>Create Account</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </>
+                )}
+              </button>
+            </form>
+          )}
         </div>
       </div>
     </div>
