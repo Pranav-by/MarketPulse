@@ -153,14 +153,3 @@ Import the included `marketpulse_postman_collection.json` into Postman. It comes
 | **Shopper / Customer** | `customer@marketpulse.io` | `Password123!` | *Shopper Portal* | — |
 
 ---
-
-## 🧪 Technical Interview Cheat Sheet (Talking Points)
-
-* **Q: How did you prevent overselling during flash sales?**
-  * *A: We eliminated read-then-write race conditions by executing atomic conditional updates in MongoDB (`$inc` guarded by `{ stock: { $gte: quantity } }`) within Mongoose multi-document ACID transactions.*
-* **Q: How does multi-vendor checkout work?**
-  * *A: A single cart is atomically validated and split into distinct vendor sub-orders with independent status lifecycles, calculating vendor earnings and platform commission fees.*
-* **Q: How do you handle network retries without double-charging?**
-  * *A: We implemented an `Idempotency-Key` middleware that hashes request payloads (SHA-256) and returns cached HTTP responses with `X-Cache-Lookup: IDEMPOTENT-HIT` for duplicate keys.*
-* **Q: How are third-party payment webhooks secured?**
-  * *A: Webhook ingress endpoints verify HMAC-SHA256 signatures using timing-safe comparisons and deduplicate events against a unique `eventId` index.*
