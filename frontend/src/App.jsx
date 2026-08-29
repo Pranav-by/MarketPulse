@@ -31,11 +31,28 @@ const LoadingScreen = () => (
 
 const MainApp = () => {
   const { user, loading } = useAuth();
-  const [currentTab, setCurrentTab] = useState('store');
+  const [currentTab, setCurrentTab] = useState(() => {
+    const savedUser = localStorage.getItem('mp_user');
+    if (savedUser) {
+      try {
+        const parsed = JSON.parse(savedUser);
+        if (parsed.role === 'vendor') return 'vendor';
+        if (parsed.role === 'admin') return 'admin';
+      } catch (e) {}
+    }
+    return 'store';
+  });
+
   const [selectedStoreSlug, setSelectedStoreSlug] = useState(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isApiDocsOpen, setIsApiDocsOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+
+  React.useEffect(() => {
+    if (user?.role === 'vendor' && currentTab !== 'vendor' && currentTab !== 'store-detail' && currentTab !== 'store') {
+      setCurrentTab('vendor');
+    }
+  }, [user]);
 
   if (loading) {
     return <LoadingScreen />;

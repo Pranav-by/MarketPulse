@@ -40,17 +40,25 @@ export const Navbar = ({ currentTab, setCurrentTab, onOpenCart, onOpenApiDocs })
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const navItems = [
-    { id: 'store', label: 'Storefront', icon: ShoppingBag, color: 'bg-[#FEF08A] dark:bg-[#FFE600] text-black' },
-    { id: 'wishlist', label: 'Wishlist', icon: Heart, count: wishlistCount, color: 'bg-[#FF6B97] dark:bg-[#FF2A85] text-white dark:text-white' },
-    { id: 'orders', label: 'My Orders', icon: Layers, color: 'bg-[#C4B5FD] dark:bg-[#B026FF] text-black dark:text-white' },
-    ...(user?.role === 'vendor' ? [{ id: 'vendor', label: 'Vendor Portal', icon: Store, color: 'bg-[#6EE7B7] dark:bg-[#00FF87] text-black' }] : []),
-    ...(user?.role === 'admin' ? [
-      { id: 'vendor', label: 'Vendor Portal', icon: Store, color: 'bg-[#6EE7B7] dark:bg-[#00FF87] text-black' },
-      { id: 'admin', label: 'Admin Hub', icon: BarChart3, color: 'bg-[#FEF08A] dark:bg-[#FFE600] text-black' },
-      { id: 'concurrency', label: 'Concurrency Lab', icon: Zap, color: 'bg-[#FF6B97] dark:bg-[#FF2A85] text-white' },
-    ] : []),
-  ];
+  // Tailored Navigation Items by Role
+  const navItems =
+    user?.role === 'vendor'
+      ? [
+          { id: 'vendor', label: 'Vendor Workspace', icon: Store, color: 'bg-[#6EE7B7] dark:bg-[#00FF87] text-black' },
+          { id: 'store', label: 'Marketplace Preview', icon: ShoppingBag, color: 'bg-[#FEF08A] dark:bg-[#FFE600] text-black' },
+        ]
+      : user?.role === 'admin'
+      ? [
+          { id: 'admin', label: 'Admin Hub', icon: BarChart3, color: 'bg-[#FEF08A] dark:bg-[#FFE600] text-black' },
+          { id: 'vendor', label: 'Vendor Portal', icon: Store, color: 'bg-[#6EE7B7] dark:bg-[#00FF87] text-black' },
+          { id: 'store', label: 'Storefront', icon: ShoppingBag, color: 'bg-[#FEF08A] dark:bg-[#FFE600] text-black' },
+          { id: 'concurrency', label: 'Concurrency Lab', icon: Zap, color: 'bg-[#FF6B97] dark:bg-[#FF2A85] text-white' },
+        ]
+      : [
+          { id: 'store', label: 'Storefront', icon: ShoppingBag, color: 'bg-[#FEF08A] dark:bg-[#FFE600] text-black' },
+          { id: 'wishlist', label: 'Wishlist', icon: Heart, count: wishlistCount, color: 'bg-[#FF6B97] dark:bg-[#FF2A85] text-white dark:text-white' },
+          { id: 'orders', label: 'My Orders', icon: Layers, color: 'bg-[#C4B5FD] dark:bg-[#B026FF] text-black dark:text-white' },
+        ];
 
   return (
     <header className="sticky top-0 z-40 bg-[#FFFFFF] dark:bg-[#121522] border-b-3 border-black shadow-brutal mb-6 transition-colors duration-200">
@@ -58,7 +66,7 @@ export const Navbar = ({ currentTab, setCurrentTab, onOpenCart, onOpenApiDocs })
         {/* Brand */}
         <div
           className="flex items-center space-x-3 cursor-pointer group"
-          onClick={() => setCurrentTab('store')}
+          onClick={() => setCurrentTab(user?.role === 'vendor' ? 'vendor' : 'store')}
         >
           <div className="w-10 h-10 rounded-xl bg-[#FEF08A] dark:bg-[#FFE600] border-2.5 border-black shadow-brutal-sm flex items-center justify-center text-black font-display font-black text-sm group-hover:rotate-6 transition">
             MP
@@ -68,7 +76,7 @@ export const Navbar = ({ currentTab, setCurrentTab, onOpenCart, onOpenApiDocs })
               MarketPulse
             </span>
             <span className="px-2 py-0.5 rounded-md bg-[#6EE7B7] dark:bg-[#00FF87] border-2 border-black text-[10px] font-mono font-black uppercase text-black shadow-[1px_1px_0px_0px_#000] hidden sm:inline-flex">
-              {isDark ? 'Cyber Dark' : 'Neubrutal'}
+              {user?.role === 'vendor' ? 'Vendor Hub' : user?.role === 'admin' ? 'Admin Hub' : isDark ? 'Cyber Dark' : 'Neubrutal'}
             </span>
           </div>
         </div>
@@ -121,25 +129,27 @@ export const Navbar = ({ currentTab, setCurrentTab, onOpenCart, onOpenApiDocs })
             )}
           </button>
 
-          {/* Wishlist quick button */}
-          <button
-            onClick={() => setCurrentTab('wishlist')}
-            className={`relative p-2 rounded-xl border-2 border-black transition ${
-              currentTab === 'wishlist'
-                ? 'bg-[#FF6B97] dark:bg-[#FF2A85] text-white shadow-brutal'
-                : 'bg-white dark:bg-[#1A1E30] text-black dark:text-white shadow-brutal-sm hover:bg-[#FBCFE8] dark:hover:bg-[#FF2A85]/20'
-            }`}
-            title="My Wishlist"
-          >
-            <Heart className="w-4 h-4" />
-            {wishlistCount > 0 && (
-              <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-black dark:bg-[#FF2A85] text-white text-[10px] font-mono font-black flex items-center justify-center border border-white">
-                {wishlistCount}
-              </span>
-            )}
-          </button>
+          {/* Wishlist button (Customers Only) */}
+          {user?.role === 'customer' && (
+            <button
+              onClick={() => setCurrentTab('wishlist')}
+              className={`relative p-2 rounded-xl border-2 border-black transition ${
+                currentTab === 'wishlist'
+                  ? 'bg-[#FF6B97] dark:bg-[#FF2A85] text-white shadow-brutal'
+                  : 'bg-white dark:bg-[#1A1E30] text-black dark:text-white shadow-brutal-sm hover:bg-[#FBCFE8] dark:hover:bg-[#FF2A85]/20'
+              }`}
+              title="My Wishlist"
+            >
+              <Heart className="w-4 h-4" />
+              {wishlistCount > 0 && (
+                <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-black dark:bg-[#FF2A85] text-white text-[10px] font-mono font-black flex items-center justify-center border border-white">
+                  {wishlistCount}
+                </span>
+              )}
+            </button>
+          )}
 
-          {/* Cart (customers) */}
+          {/* Cart (Customers Only) */}
           {user?.role === 'customer' && (
             <button
               onClick={onOpenCart}
@@ -155,7 +165,7 @@ export const Navbar = ({ currentTab, setCurrentTab, onOpenCart, onOpenApiDocs })
             </button>
           )}
 
-          {/* API Docs (admin only) */}
+          {/* API Docs (Admin Only) */}
           {user?.role === 'admin' && (
             <button
               onClick={onOpenApiDocs}
@@ -214,17 +224,32 @@ export const Navbar = ({ currentTab, setCurrentTab, onOpenCart, onOpenApiDocs })
                   )}
                 </div>
 
-                {/* Wishlist Link */}
-                <button
-                  onClick={() => {
-                    setCurrentTab('wishlist');
-                    setShowUserMenu(false);
-                  }}
-                  className="w-full text-left px-3 py-2 rounded-xl hover:bg-[#F3F4F6] dark:hover:bg-[#1A1E30] transition flex items-center space-x-2 text-xs font-bold text-black dark:text-white"
-                >
-                  <Heart className="w-4 h-4 text-[#FF6B97] dark:text-[#FF2A85]" />
-                  <span>My Wishlist ({wishlistCount})</span>
-                </button>
+                {/* Role Specific Quick Links */}
+                {user?.role === 'customer' && (
+                  <button
+                    onClick={() => {
+                      setCurrentTab('wishlist');
+                      setShowUserMenu(false);
+                    }}
+                    className="w-full text-left px-3 py-2 rounded-xl hover:bg-[#F3F4F6] dark:hover:bg-[#1A1E30] transition flex items-center space-x-2 text-xs font-bold text-black dark:text-white"
+                  >
+                    <Heart className="w-4 h-4 text-[#FF6B97] dark:text-[#FF2A85]" />
+                    <span>My Wishlist ({wishlistCount})</span>
+                  </button>
+                )}
+
+                {user?.role === 'vendor' && (
+                  <button
+                    onClick={() => {
+                      setCurrentTab('vendor');
+                      setShowUserMenu(false);
+                    }}
+                    className="w-full text-left px-3 py-2 rounded-xl hover:bg-[#F3F4F6] dark:hover:bg-[#1A1E30] transition flex items-center space-x-2 text-xs font-bold text-black dark:text-white"
+                  >
+                    <Store className="w-4 h-4 text-[#6EE7B7] dark:text-[#00FF87]" />
+                    <span>Vendor Workspace</span>
+                  </button>
+                )}
 
                 {/* Logout */}
                 <button
