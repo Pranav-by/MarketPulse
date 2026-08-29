@@ -16,7 +16,7 @@
 
 .dark {
   --brutal-bg: #090A10;
-  --brutal-card-bg: #121522;
+  --brutal-card-bg: #161A2B;
   --brutal-text: #F8FAFC;
   --brutal-border: #000000;
   --brutal-shadow: #000000;
@@ -49,8 +49,8 @@ body {
 .dark .brutal-grid-bg {
   background-color: #090A10;
   background-image: 
-    linear-gradient(rgba(255, 42, 133, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 240, 255, 0.05) 1px, transparent 1px);
+    linear-gradient(rgba(255, 42, 133, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 240, 255, 0.08) 1px, transparent 1px);
   background-size: 32px 32px;
 }
 
@@ -63,42 +63,42 @@ body {
   background: #FFFFFF;
   color: #000000;
   border: 2.5px solid #000000;
-  border-radius: 18px;
-  box-shadow: 4px 4px 0px 0px #000000;
+  border-radius: 20px;
+  box-shadow: 5px 5px 0px 0px #000000;
   transition: all 0.15s ease;
 }
 
 .dark .neo-card {
-  background: #121522;
+  background: #161A2B;
   color: #F8FAFC;
   border: 2.5px solid #000000;
-  box-shadow: 4px 4px 0px 0px #000000, 0 0 0 1px rgba(255, 255, 255, 0.08);
+  box-shadow: 5px 5px 0px 0px #000000, 0 0 0 1.5px rgba(255, 255, 255, 0.16);
 }
 
 .neo-card-interactive {
   background: #FFFFFF;
   color: #000000;
   border: 2.5px solid #000000;
-  border-radius: 18px;
-  box-shadow: 4px 4px 0px 0px #000000;
+  border-radius: 20px;
+  box-shadow: 5px 5px 0px 0px #000000;
   transition: all 0.15s ease;
 }
 
 .dark .neo-card-interactive {
-  background: #121522;
+  background: #161A2B;
   color: #F8FAFC;
   border: 2.5px solid #000000;
-  box-shadow: 4px 4px 0px 0px #000000, 0 0 0 1px rgba(255, 255, 255, 0.08);
+  box-shadow: 5px 5px 0px 0px #000000, 0 0 0 1.5px rgba(255, 255, 255, 0.16);
 }
 
 .neo-card-interactive:hover {
   transform: translate(-2px, -2px);
-  box-shadow: 6px 6px 0px 0px #000000;
+  box-shadow: 7px 7px 0px 0px #000000;
 }
 
 .dark .neo-card-interactive:hover {
   border-color: #000000;
-  box-shadow: 6px 6px 0px 0px #000000, 0 0 15px rgba(0, 240, 255, 0.2);
+  box-shadow: 7px 7px 0px 0px #000000, 0 0 20px rgba(0, 240, 255, 0.35);
 }
 
 .neo-card-interactive:active {
@@ -159,8 +159,8 @@ body {
   background: #F3F4F6;
 }
 .dark .neo-badge-muted {
-  background: #1E2337;
-  color: #CBD5E1;
+  background: #252A42;
+  color: #E2E8F0;
 }
 
 /* Buttons */
@@ -213,10 +213,10 @@ body {
 }
 
 .dark .neo-btn-secondary {
-  background: #1A1E30;
+  background: #252A42;
   color: #FFFFFF;
   border: 2.5px solid #000000;
-  box-shadow: 3px 3px 0px 0px #000000, 0 0 0 1px rgba(255, 255, 255, 0.1);
+  box-shadow: 3px 3px 0px 0px #000000, 0 0 0 1.5px rgba(255, 255, 255, 0.15);
 }
 
 .neo-btn-secondary:hover {
@@ -226,7 +226,7 @@ body {
 }
 
 .dark .neo-btn-secondary:hover {
-  background: #252A42;
+  background: #313757;
 }
 
 .neo-btn-secondary:active {

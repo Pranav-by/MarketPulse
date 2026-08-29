@@ -221,10 +221,10 @@ export const StorefrontView = ({ onSelectProduct, onOpenStore }) => {
               <div
                 key={product._id}
                 onClick={() => onSelectProduct(product)}
-                className="bg-white dark:bg-[#121522] border-3 border-black rounded-3xl shadow-brutal hover:shadow-brutal-lg hover:translate-x-[-2px] hover:translate-y-[-2px] transition duration-150 cursor-pointer flex flex-col justify-between overflow-hidden group text-black dark:text-white"
+                className="bg-white dark:bg-[#161A2B] border-3 border-black rounded-3xl shadow-brutal dark:shadow-[5px_5px_0px_0px_#000000,0_0_0_1.5px_rgba(255,255,255,0.18)] hover:shadow-brutal-lg dark:hover:shadow-[7px_7px_0px_0px_#000000,0_0_20px_rgba(0,240,255,0.35)] hover:translate-x-[-2px] hover:translate-y-[-2px] transition duration-150 cursor-pointer flex flex-col justify-between overflow-hidden group text-black dark:text-white"
               >
                 {/* Product Image & Badges */}
-                <div className="relative h-52 w-full bg-[#F3F4F6] dark:bg-[#1A1E30] overflow-hidden border-b-3 border-black">
+                <div className="relative h-52 w-full bg-[#F3F4F6] dark:bg-[#20253B] overflow-hidden border-b-3 border-black">
                   <img
                     src={product.images[0]}
                     alt={product.title}
@@ -241,7 +241,7 @@ export const StorefrontView = ({ onSelectProduct, onOpenStore }) => {
                     className={`absolute top-3 right-3 p-2 rounded-xl border-2 border-black transition shadow-brutal-sm ${
                       inWish
                         ? 'bg-[#FF6B97] dark:bg-[#FF2A85] text-white'
-                        : 'bg-white dark:bg-[#1A1E30] text-black dark:text-white hover:bg-[#FF6B97] hover:text-white'
+                        : 'bg-white dark:bg-[#252A42] text-black dark:text-white hover:bg-[#FF6B97] hover:text-white'
                     }`}
                     title={inWish ? 'Remove from wishlist' : 'Save to wishlist'}
                   >
@@ -258,7 +258,7 @@ export const StorefrontView = ({ onSelectProduct, onOpenStore }) => {
                           onOpenStore(product.store.slug);
                         }
                       }}
-                      className="absolute bottom-3 left-3 px-2.5 py-1 rounded-xl bg-white dark:bg-[#1A1E30] border-2 border-black text-[10px] font-display font-black text-black dark:text-white hover:bg-[#FEF08A] dark:hover:bg-[#FFE600] dark:hover:text-black flex items-center space-x-1 transition shadow-brutal-sm"
+                      className="absolute bottom-3 left-3 px-2.5 py-1 rounded-xl bg-white dark:bg-[#252A42] border-2 border-black text-[10px] font-display font-black text-black dark:text-white hover:bg-[#FEF08A] dark:hover:bg-[#FFE600] dark:hover:text-black flex items-center space-x-1 transition shadow-brutal-sm"
                     >
                       <Store className="w-3.5 h-3.5" />
                       <span>{product.store.name}</span>
@@ -290,7 +290,7 @@ export const StorefrontView = ({ onSelectProduct, onOpenStore }) => {
                   <div className="pt-3 border-t-2 border-black flex items-center justify-between">
                     <div>
                       <div className="flex items-baseline space-x-1.5 font-mono">
-                        <span className="text-lg font-black text-black dark:text-white">${product.price.toFixed(2)}</span>
+                        <span className="text-lg font-black text-black dark:text-[#FFE600]">${product.price.toFixed(2)}</span>
                         {product.compareAtPrice && (
                           <span className="text-xs text-black/50 dark:text-slate-400 line-through">
                             ${product.compareAtPrice.toFixed(2)}
@@ -298,7 +298,7 @@ export const StorefrontView = ({ onSelectProduct, onOpenStore }) => {
                         )}
                       </div>
                       <div className="text-[10px] font-mono font-bold text-black/70 dark:text-slate-300">
-                        Stock: <span className={product.stock > 0 ? 'text-black dark:text-[#00FF87]' : 'text-rose-600 font-black'}>
+                        Stock: <span className={product.stock > 0 ? 'text-black dark:text-[#00FF87] font-black' : 'text-rose-600 font-black'}>
                           {product.stock > 0 ? `${product.stock} units` : 'Sold Out'}
                         </span>
                       </div>

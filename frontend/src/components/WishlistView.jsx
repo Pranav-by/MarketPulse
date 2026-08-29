@@ -75,9 +75,9 @@ export const WishlistView = ({ onGoToStore, onSelectProduct }) => {
             <div
               key={product._id}
               onClick={() => onSelectProduct(product)}
-              className="bg-white border-3 border-black rounded-2xl shadow-brutal hover:shadow-brutal-lg hover:translate-x-[-2px] hover:translate-y-[-2px] transition duration-150 cursor-pointer flex flex-col justify-between overflow-hidden group"
+              className="bg-white dark:bg-[#161A2B] border-3 border-black rounded-3xl shadow-brutal dark:shadow-[5px_5px_0px_0px_#000000,0_0_0_1.5px_rgba(255,255,255,0.18)] hover:shadow-brutal-lg dark:hover:shadow-[7px_7px_0px_0px_#000000,0_0_20px_rgba(0,240,255,0.35)] hover:translate-x-[-2px] hover:translate-y-[-2px] transition duration-150 cursor-pointer flex flex-col justify-between overflow-hidden group text-black dark:text-white"
             >
-              <div className="relative h-48 w-full bg-[#F3F4F6] overflow-hidden border-b-3 border-black">
+              <div className="relative h-48 w-full bg-[#F3F4F6] dark:bg-[#20253B] overflow-hidden border-b-3 border-black">
                 <img
                   src={product.images?.[0] || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80'}
                   alt={product.title}
@@ -90,7 +90,7 @@ export const WishlistView = ({ onGoToStore, onSelectProduct }) => {
                     e.stopPropagation();
                     toggleWishlist(product);
                   }}
-                  className="absolute top-3 right-3 p-2 rounded-xl bg-[#FF6B97] text-white border-2 border-black shadow-brutal-sm hover:scale-110 transition"
+                  className="absolute top-3 right-3 p-2 rounded-xl bg-[#FF6B97] dark:bg-[#FF2A85] text-white border-2 border-black shadow-brutal-sm hover:scale-110 transition"
                   title="Remove from wishlist"
                 >
                   <Heart className="w-4 h-4 fill-current" />
@@ -100,26 +100,26 @@ export const WishlistView = ({ onGoToStore, onSelectProduct }) => {
               <div className="p-5 space-y-3 flex-1 flex flex-col justify-between">
                 <div>
                   <div className="flex items-center justify-between text-[11px] font-mono font-bold text-black mb-1">
-                    <span className="px-2 py-0.5 rounded-md bg-[#C4B5FD] border border-black uppercase tracking-wider">{product.category}</span>
-                    <div className="flex items-center space-x-1 px-2 py-0.5 rounded-md bg-[#FEF08A] border border-black">
+                    <span className="px-2 py-0.5 rounded-md bg-[#C4B5FD] dark:bg-[#B026FF] dark:text-white border border-black uppercase tracking-wider font-black">{product.category}</span>
+                    <div className="flex items-center space-x-1 px-2 py-0.5 rounded-md bg-[#FEF08A] dark:bg-[#FFE600] text-black border border-black font-black">
                       <Star className="w-3 h-3 text-black fill-current" />
                       <span>{product.rating}</span>
                     </div>
                   </div>
 
-                  <h3 className="text-base font-display font-black text-black line-clamp-1 mt-2">
+                  <h3 className="text-base font-display font-black text-black dark:text-white line-clamp-1 mt-2">
                     {product.title}
                   </h3>
-                  <p className="text-xs font-semibold text-black/70 line-clamp-2 mt-1 leading-relaxed">
+                  <p className="text-xs font-semibold text-black/70 dark:text-slate-300 line-clamp-2 mt-1 leading-relaxed">
                     {product.description}
                   </p>
                 </div>
 
                 <div className="pt-3 border-t-2 border-black flex items-center justify-between">
                   <div>
-                    <span className="text-base font-black text-black font-mono">${product.price?.toFixed(2)}</span>
-                    <div className="text-[10px] font-mono font-bold text-black/70">
-                      Stock: <span className={product.stock > 0 ? 'text-black font-black' : 'text-rose-600 font-black'}>{product.stock} units</span>
+                    <span className="text-base font-black text-black dark:text-[#FFE600] font-mono">${product.price?.toFixed(2)}</span>
+                    <div className="text-[10px] font-mono font-bold text-black/70 dark:text-slate-300">
+                      Stock: <span className={product.stock > 0 ? 'text-black dark:text-[#00FF87] font-black' : 'text-rose-600 font-black'}>{product.stock} units</span>
                     </div>
                   </div>
 
@@ -129,7 +129,7 @@ export const WishlistView = ({ onGoToStore, onSelectProduct }) => {
                       e.stopPropagation();
                       handleMoveToCart(product);
                     }}
-                    className="px-4 py-2 rounded-xl bg-[#6EE7B7] hover:bg-[#34D399] text-black font-display font-black text-xs border-2 border-black shadow-brutal-sm flex items-center space-x-1.5 transition"
+                    className="px-4 py-2 rounded-xl bg-[#6EE7B7] dark:bg-[#00FF87] hover:bg-[#34D399] text-black font-display font-black text-xs border-2 border-black shadow-brutal-sm flex items-center space-x-1.5 transition"
                   >
                     <ShoppingBag className="w-3.5 h-3.5" />
                     <span>Move to Cart</span>
