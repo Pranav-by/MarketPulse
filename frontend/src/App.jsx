@@ -51,6 +51,8 @@ const MainApp = () => {
   React.useEffect(() => {
     if (user?.role === 'vendor' && currentTab !== 'vendor' && currentTab !== 'store-detail' && currentTab !== 'store') {
       setCurrentTab('vendor');
+    } else if (user?.role === 'admin' && currentTab !== 'admin' && currentTab !== 'vendor' && currentTab !== 'concurrency' && currentTab !== 'store' && currentTab !== 'store-detail') {
+      setCurrentTab('admin');
     }
   }, [user]);
 

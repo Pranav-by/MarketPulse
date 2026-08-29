@@ -19,6 +19,7 @@ import {
   Sun,
   Moon,
   Sparkles,
+  ShieldCheck,
 } from 'lucide-react';
 
 export const Navbar = ({ currentTab, setCurrentTab, onOpenCart, onOpenApiDocs }) => {
@@ -49,10 +50,10 @@ export const Navbar = ({ currentTab, setCurrentTab, onOpenCart, onOpenApiDocs })
         ]
       : user?.role === 'admin'
       ? [
-          { id: 'admin', label: 'Admin Hub', icon: BarChart3, color: 'bg-[#FEF08A] dark:bg-[#FFE600] text-black' },
-          { id: 'vendor', label: 'Vendor Portal', icon: Store, color: 'bg-[#6EE7B7] dark:bg-[#00FF87] text-black' },
-          { id: 'store', label: 'Storefront', icon: ShoppingBag, color: 'bg-[#FEF08A] dark:bg-[#FFE600] text-black' },
+          { id: 'admin', label: 'Platform Console', icon: BarChart3, color: 'bg-[#FEF08A] dark:bg-[#FFE600] text-black' },
+          { id: 'vendor', label: 'Vendor Oversight', icon: Store, color: 'bg-[#6EE7B7] dark:bg-[#00FF87] text-black' },
           { id: 'concurrency', label: 'Concurrency Lab', icon: Zap, color: 'bg-[#FF6B97] dark:bg-[#FF2A85] text-white' },
+          { id: 'store', label: 'Live Catalog', icon: ShoppingBag, color: 'bg-[#C4B5FD] dark:bg-[#B026FF] text-black dark:text-white' },
         ]
       : [
           { id: 'store', label: 'Storefront', icon: ShoppingBag, color: 'bg-[#FEF08A] dark:bg-[#FFE600] text-black' },
@@ -60,13 +61,19 @@ export const Navbar = ({ currentTab, setCurrentTab, onOpenCart, onOpenApiDocs })
           { id: 'orders', label: 'My Orders', icon: Layers, color: 'bg-[#C4B5FD] dark:bg-[#B026FF] text-black dark:text-white' },
         ];
 
+  const handleBrandClick = () => {
+    if (user?.role === 'vendor') setCurrentTab('vendor');
+    else if (user?.role === 'admin') setCurrentTab('admin');
+    else setCurrentTab('store');
+  };
+
   return (
     <header className="sticky top-0 z-40 bg-[#FFFFFF] dark:bg-[#121522] border-b-3 border-black shadow-brutal mb-6 transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand */}
         <div
           className="flex items-center space-x-3 cursor-pointer group"
-          onClick={() => setCurrentTab(user?.role === 'vendor' ? 'vendor' : 'store')}
+          onClick={handleBrandClick}
         >
           <div className="w-10 h-10 rounded-xl bg-[#FEF08A] dark:bg-[#FFE600] border-2.5 border-black shadow-brutal-sm flex items-center justify-center text-black font-display font-black text-sm group-hover:rotate-6 transition">
             MP
@@ -76,7 +83,7 @@ export const Navbar = ({ currentTab, setCurrentTab, onOpenCart, onOpenApiDocs })
               MarketPulse
             </span>
             <span className="px-2 py-0.5 rounded-md bg-[#6EE7B7] dark:bg-[#00FF87] border-2 border-black text-[10px] font-mono font-black uppercase text-black shadow-[1px_1px_0px_0px_#000] hidden sm:inline-flex">
-              {user?.role === 'vendor' ? 'Vendor Hub' : user?.role === 'admin' ? 'Admin Hub' : isDark ? 'Cyber Dark' : 'Neubrutal'}
+              {user?.role === 'vendor' ? 'Vendor Hub' : user?.role === 'admin' ? 'Admin Console' : isDark ? 'Cyber Dark' : 'Neubrutal'}
             </span>
           </div>
         </div>
@@ -165,14 +172,14 @@ export const Navbar = ({ currentTab, setCurrentTab, onOpenCart, onOpenApiDocs })
             </button>
           )}
 
-          {/* API Docs (Admin Only) */}
+          {/* API Docs & Postman (Admin Only) */}
           {user?.role === 'admin' && (
             <button
               onClick={onOpenApiDocs}
-              className="hidden sm:flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-display font-bold bg-[#67E8F9] dark:bg-[#00F0FF] border-2 border-black shadow-brutal-sm text-black hover:bg-[#38BDF8] transition"
+              className="flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-display font-bold bg-[#67E8F9] dark:bg-[#00F0FF] border-2 border-black shadow-brutal-sm text-black hover:bg-[#38BDF8] transition"
             >
               <FileCode className="w-4 h-4 text-black" />
-              <span>API</span>
+              <span className="hidden sm:inline">REST Docs</span>
             </button>
           )}
 
@@ -249,6 +256,31 @@ export const Navbar = ({ currentTab, setCurrentTab, onOpenCart, onOpenApiDocs })
                     <Store className="w-4 h-4 text-[#6EE7B7] dark:text-[#00FF87]" />
                     <span>Vendor Workspace</span>
                   </button>
+                )}
+
+                {user?.role === 'admin' && (
+                  <div className="space-y-1">
+                    <button
+                      onClick={() => {
+                        setCurrentTab('admin');
+                        setShowUserMenu(false);
+                      }}
+                      className="w-full text-left px-3 py-2 rounded-xl hover:bg-[#F3F4F6] dark:hover:bg-[#1A1E30] transition flex items-center space-x-2 text-xs font-bold text-black dark:text-white"
+                    >
+                      <BarChart3 className="w-4 h-4 text-[#FEF08A] dark:text-[#FFE600]" />
+                      <span>Platform Analytics Hub</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setCurrentTab('concurrency');
+                        setShowUserMenu(false);
+                      }}
+                      className="w-full text-left px-3 py-2 rounded-xl hover:bg-[#F3F4F6] dark:hover:bg-[#1A1E30] transition flex items-center space-x-2 text-xs font-bold text-black dark:text-white"
+                    >
+                      <Zap className="w-4 h-4 text-[#FF6B97] dark:text-[#FF2A85]" />
+                      <span>Concurrency & Webhook Lab</span>
+                    </button>
+                  </div>
                 )}
 
                 {/* Logout */}
