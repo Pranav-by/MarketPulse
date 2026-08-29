@@ -105,10 +105,20 @@ export const Navbar = ({ currentTab, setCurrentTab, onOpenCart, onOpenApiDocs })
           {/* Dark / Light Theme Toggle */}
           <button
             onClick={toggleTheme}
-            className="p-2 rounded-xl bg-white dark:bg-[#1A1E30] border-2 border-black text-black dark:text-white shadow-brutal-sm hover:bg-[#FEF08A] dark:hover:bg-[#FFE600] dark:hover:text-black transition"
-            title={isDark ? 'Switch to Light Theme' : 'Switch to Sexy Dark Theme'}
+            className="px-3 py-1.5 rounded-xl bg-[#FEF08A] dark:bg-[#FFE600] text-black font-display font-black text-xs border-2 border-black shadow-brutal-sm hover:scale-105 active:translate-x-[2px] transition flex items-center space-x-1.5"
+            title={isDark ? 'Switch to Light Theme' : 'Switch to Cyber Dark Theme'}
           >
-            {isDark ? <Sun className="w-4 h-4 text-[#FFE600]" /> : <Moon className="w-4 h-4 text-black" />}
+            {isDark ? (
+              <>
+                <Sun className="w-3.5 h-3.5 text-black fill-current" />
+                <span className="hidden sm:inline">Light Mode</span>
+              </>
+            ) : (
+              <>
+                <Moon className="w-3.5 h-3.5 text-black fill-current" />
+                <span className="hidden sm:inline">Cyber Dark</span>
+              </>
+            )}
           </button>
 
           {/* Wishlist quick button */}
