@@ -1,4 +1,7 @@
-const API_BASE = import.meta.env.VITE_API_URL || '/api/v1';
+const rawApiUrl = import.meta.env.VITE_API_URL || '/api/v1';
+const API_BASE = rawApiUrl.endsWith('/api/v1')
+  ? rawApiUrl
+  : (rawApiUrl.startsWith('http') ? `${rawApiUrl.replace(/\/$/, '')}/api/v1` : rawApiUrl);
 
 const getHeaders = (idempotencyKey = null) => {
   const token = localStorage.getItem('mp_token');
