@@ -1,0 +1,205 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Neo-Minimalist Warm Dark Palette */
+  --bg-canvas: #090a0f;
+  --bg-surface: #10121a;
+  --bg-elevated: #161924;
+  --bg-muted: #1c2030;
+  
+  --border-subtle: rgba(255, 255, 255, 0.07);
+  --border-medium: rgba(255, 255, 255, 0.12);
+  --border-focus: rgba(99, 102, 241, 0.5);
+
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-tertiary: #64748b;
+
+  --accent-amber: #f59e0b;
+  --accent-emerald: #10b981;
+  --accent-indigo: #6366f1;
+  --accent-rose: #f43f5e;
+  --accent-warm: #d97706;
+
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Newsreader', serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-canvas);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  letter-spacing: -0.01em;
+}
+
+/* ═══════════════════════════════════════════════
+   NEO-MINIMALIST DESIGN SYSTEM — Component Layer
+   ═══════════════════════════════════════════════ */
+
+/* Bento & Surface Cards */
+.neo-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.neo-card:hover {
+  background: var(--bg-elevated);
+  border-color: var(--border-medium);
+}
+
+.neo-card-interactive {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.neo-card-interactive:hover {
+  background: var(--bg-elevated);
+  border-color: var(--border-medium);
+  transform: translateY(-2px);
+}
+
+/* Pill Badges */
+.neo-badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 3px 8px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.neo-badge-indigo {
+  background: rgba(99, 102, 241, 0.08);
+  color: #a5b4fc;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.neo-badge-emerald {
+  background: rgba(16, 185, 129, 0.08);
+  color: #6ee7b7;
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.neo-badge-amber {
+  background: rgba(245, 158, 11, 0.08);
+  color: #fcd34d;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.neo-badge-rose {
+  background: rgba(244, 63, 94, 0.08);
+  color: #fda4af;
+  border: 1px solid rgba(244, 63, 94, 0.2);
+}
+
+.neo-badge-muted {
+  background: rgba(255, 255, 255, 0.04);
+  color: #94a3b8;
+  border: 1px solid var(--border-subtle);
+}
+
+/* Buttons */
+.neo-btn-primary {
+  background: #f8fafc;
+  color: #090a0f;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.neo-btn-primary:hover {
+  background: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+}
+
+.neo-btn-primary:active {
+  transform: scale(0.98);
+}
+
+.neo-btn-secondary {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--border-medium);
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.neo-btn-secondary:hover {
+  background: var(--bg-muted);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.neo-btn-secondary:active {
+  transform: scale(0.98);
+}
+
+/* Typography */
+.font-editorial {
+  font-family: var(--font-serif);
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #272c3d;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #373e54;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Form Resets */
+input, select, textarea, button {
+  font-family: inherit;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+}
+
+select option {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+}
