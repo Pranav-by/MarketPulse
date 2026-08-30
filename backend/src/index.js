@@ -18,6 +18,7 @@ import analyticsRoutes from './routes/analyticsRoutes.js';
 import webhookRoutes from './routes/webhookRoutes.js';
 import devToolsRoutes from './routes/devToolsRoutes.js';
 import storeRoutes from './routes/storeRoutes.js';
+import aiRoutes from './routes/aiRoutes.js';
 
 dotenv.config();
 
@@ -66,6 +67,7 @@ app.use('/api/v1/analytics', analyticsRoutes);
 app.use('/api/v1/webhooks', webhookRoutes);
 app.use('/api/v1/devtools', devToolsRoutes);
 app.use('/api/v1/stores', storeRoutes);
+app.use('/api/v1/ai', aiRoutes);
 
 // Catch 404
 app.use('*', (req, res) => {

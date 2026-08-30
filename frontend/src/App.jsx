@@ -15,7 +15,8 @@ import { CartDrawer } from './components/CartDrawer';
 import { ProductDetailModal } from './components/ProductDetailModal';
 import { ApiDocsModal } from './components/ApiDocsModal';
 import { OrdersHistoryView } from './components/OrdersHistoryView';
-import { Sparkles } from 'lucide-react';
+import { AiAssistantDrawer } from './components/AiAssistantDrawer';
+import { Sparkles, Bot } from 'lucide-react';
 
 const LoadingScreen = () => (
   <div className="min-h-screen bg-[#5B85FA] dark:bg-[#090A10] brutal-grid-bg flex items-center justify-center p-4">
@@ -46,6 +47,7 @@ const MainApp = () => {
   const [selectedStoreSlug, setSelectedStoreSlug] = useState(null);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isApiDocsOpen, setIsApiDocsOpen] = useState(false);
+  const [isAiOpen, setIsAiOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
 
   React.useEffect(() => {
@@ -70,13 +72,14 @@ const MainApp = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#5B85FA] dark:bg-[#090A10] brutal-grid-bg text-black dark:text-white selection:bg-[#FEF08A] selection:text-black flex flex-col justify-between transition-colors duration-200">
+    <div className="min-h-screen bg-[#5B85FA] dark:bg-[#090A10] brutal-grid-bg text-black dark:text-white selection:bg-[#FEF08A] selection:text-black flex flex-col justify-between transition-colors duration-200 relative">
       {/* Top Navbar */}
       <Navbar
         currentTab={currentTab}
         setCurrentTab={setCurrentTab}
         onOpenCart={() => setIsCartOpen(true)}
         onOpenApiDocs={() => setIsApiDocsOpen(true)}
+        onOpenAi={() => setIsAiOpen(true)}
       />
 
       {/* Main Content Area */}
@@ -106,6 +109,21 @@ const MainApp = () => {
         {currentTab === 'concurrency' && <ConcurrencyLabView />}
       </main>
 
+      {/* Persistent Floating AI Assistant Launcher FAB */}
+      <div className="fixed bottom-6 right-6 z-40">
+        <button
+          onClick={() => setIsAiOpen(true)}
+          className="group relative flex items-center space-x-2 bg-[#FFE600] hover:bg-[#FFD700] text-black px-4 py-3.5 rounded-2xl border-3 border-black shadow-brutal hover:shadow-brutal-lg hover:-translate-y-1 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-200 font-display font-black text-sm uppercase tracking-wider cursor-pointer"
+        >
+          <span className="relative flex h-3 w-3">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-black opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-3 w-3 bg-black"></span>
+          </span>
+          <Sparkles className="w-5 h-5 text-black group-hover:rotate-12 transition-transform" />
+          <span>Ask AI Pulse</span>
+        </button>
+      </div>
+
       {/* Cart Drawer */}
       <CartDrawer
         isOpen={isCartOpen}
@@ -124,6 +142,14 @@ const MainApp = () => {
       <ApiDocsModal
         isOpen={isApiDocsOpen}
         onClose={() => setIsApiDocsOpen(false)}
+      />
+
+      {/* AI Assistant Drawer (LangGraph Agent) */}
+      <AiAssistantDrawer
+        isOpen={isAiOpen}
+        onClose={() => setIsAiOpen(false)}
+        onSelectProduct={(product) => setSelectedProduct(product)}
+        onOpenStore={handleOpenStore}
       />
 
       {/* Footer */}

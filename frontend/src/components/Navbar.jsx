@@ -22,7 +22,7 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 
-export const Navbar = ({ currentTab, setCurrentTab, onOpenCart, onOpenApiDocs }) => {
+export const Navbar = ({ currentTab, setCurrentTab, onOpenCart, onOpenApiDocs, onOpenAi }) => {
   const { user, logout } = useAuth();
   const { totalItemCount } = useCart();
   const { wishlistCount } = useWishlist();
@@ -117,10 +117,20 @@ export const Navbar = ({ currentTab, setCurrentTab, onOpenCart, onOpenApiDocs })
 
         {/* Right Actions */}
         <div className="flex items-center space-x-2.5">
+          {/* AI Assistant Launcher */}
+          <button
+            onClick={onOpenAi}
+            className="px-3 py-1.5 rounded-xl bg-[#A78BFA] hover:bg-[#8B5CF6] dark:bg-[#7C3AED] dark:hover:bg-[#6D28D9] text-white font-display font-black text-xs border-2 border-black shadow-brutal-sm hover:scale-105 active:translate-x-[2px] transition flex items-center space-x-1.5 cursor-pointer"
+            title="Ask MarketPulse AI Assistant (LangGraph + Groq)"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-[#FEF08A] animate-pulse" />
+            <span className="hidden sm:inline">AI Pulse</span>
+          </button>
+
           {/* Dark / Light Theme Toggle */}
           <button
             onClick={toggleTheme}
-            className="px-3 py-1.5 rounded-xl bg-[#FEF08A] dark:bg-[#FFE600] text-black font-display font-black text-xs border-2 border-black shadow-brutal-sm hover:scale-105 active:translate-x-[2px] transition flex items-center space-x-1.5"
+            className="px-3 py-1.5 rounded-xl bg-[#FEF08A] dark:bg-[#FFE600] text-black font-display font-black text-xs border-2 border-black shadow-brutal-sm hover:scale-105 active:translate-x-[2px] transition flex items-center space-x-1.5 cursor-pointer"
             title={isDark ? 'Switch to Light Theme' : 'Switch to Cyber Dark Theme'}
           >
             {isDark ? (
